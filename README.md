@@ -1,5 +1,7 @@
 ### Hi there 👋
 
+<img src="/github-metrics.svg" alt="Metrics" width="100%">
+
 <!--
 **sinsky/sinsky** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
