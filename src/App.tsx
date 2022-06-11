@@ -1,5 +1,6 @@
 import { FaTwitterSquare, FaGithubSquare } from "react-icons/fa";
 import { useState } from "react";
+import { ContactForm } from "./Contact";
 import MySkill from "./MySkill.json";
 
 type SkillProps = {
@@ -86,6 +87,12 @@ function App() {
                 );
               })}
             </div>
+          </div>
+        </div>
+        <div className="container m-auto h-screen flex flex-col items-center justify-around snap-center snap-always">
+          <div>
+            <h2 className="font-bold text-3xl mb-4 capitalize">Contact</h2>
+            <ContactForm />
           </div>
         </div>
       </div>

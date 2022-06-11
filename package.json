@@ -8,10 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^4.2.8",
+    "@mantine/form": "^4.2.8",
+    "@mantine/hooks": "^4.2.8",
+    "@mantine/notifications": "^4.2.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^4.4.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
