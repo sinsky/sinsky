@@ -33,6 +33,14 @@
     {
       "title": "React UI Library",
       "description": "Mantine, MUI"
+    },
+    {
+      "title": "Virtualization",
+      "description": "docker, docker-compose, k8s"
+    },
+    {
+      "title": "CI/CD Tools",
+      "description": "GithubActions, CircleCI"
     }
   ]
 }
