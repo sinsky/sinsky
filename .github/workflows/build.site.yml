@@ -1,0 +1,33 @@
+name: build-site-file
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions:checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        with:
+          node-version: ${{matrix.node-version}}
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+      - name: build build-site-file
+        run: yarn build
+      - name: commit file
+        run: |
+          git config --local user.email "60662802+sinsky@users.noreply.github.com"
+          git config --local user.name "GitHub Actions bot"
+          git add docs/
+          git commit -m "add build file"
+      - name: Push Change
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          branch: main
