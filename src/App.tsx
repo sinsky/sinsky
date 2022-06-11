@@ -18,7 +18,7 @@ function App() {
     <div className="bg-slate-300 text-center">
       <div className="flex-flex-col snap-y snap-mandatory overflow-y-auto h-screen">
         <div className="container m-auto h-screen flex flex-col items-center justify-around snap-center snap-always">
-          <div className="py-12">
+          <div>
             <div>
               <img
                 className="w-32 h-32 m-auto border rounded-full"
@@ -26,10 +26,10 @@ function App() {
                 alt="My Icon"
               />
             </div>
-            <h1 className="font-bold text-4xl">sinsky</h1>
+            <h1 className="font-bold text-4xl mt-4">sinsky</h1>
           </div>
-          <div className="py-12">
-            <h2 className="font-bold text-3xl capitalize">About me</h2>
+          <div>
+            <h2 className="font-bold text-3xl mb-4 capitalize">About me</h2>
             <div className="flex justify-around">
               <div>
                 <a href="https://twitter.com/sin_sky_">
@@ -45,8 +45,8 @@ function App() {
           </div>
         </div>
         <div className="container m-auto h-screen flex flex-col items-center justify-around snap-center snap-always">
-          <div className="py-12">
-            <h2 className="font-bold text-3xl capitalize">Use skills</h2>
+          <div>
+            <h2 className="font-bold text-3xl mb-4 capitalize">Use skills</h2>
             <div className="flex flex-col">
               <div className="border-b border-teal-800 grid grid-cols-2 gap-4 font-bold py-4">
                 <div>Language</div>
@@ -69,8 +69,8 @@ function App() {
           </div>
         </div>
         <div className="container m-auto h-screen flex flex-col items-center justify-around snap-center snap-always">
-          <div className="py-12">
-            <h2 className="font-bold text-3xl capitalize">Other skills</h2>
+          <div>
+            <h2 className="font-bold text-3xl mb-4 capitalize">Other skills</h2>
             <div className="flex flex-col">
               <div className="border-b border-teal-800 grid grid-cols-2 gap-4 font-bold py-4">
                 <div></div>
