@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { useForm, zodResolver } from "@mantine/form";
-import { Switch, TextInput, Button, Textarea, Group } from "@mantine/core";
+import { RadioGroup, Radio, TextInput, Button, Textarea } from "@mantine/core";
+import { showNotification } from '@mantine/notifications';
 
 const contactFormData: { [key: string]: any } = {
   name: "entry.1117731376",
@@ -17,7 +18,7 @@ const scheme = z.object({
     .email({ message: "正しい形式のメールアドレスを入力してください" }),
   subject: z.string().min(1, { message: "必須項目です" }),
   body: z.string().min(1, { message: "必須項目です" }),
-  autoReply: z.boolean(),
+  autoReply: z.string().regex(/(あり|なし)/, { message: "設定がおかしいようです..." })
 });
 
 type FormProps = {
@@ -25,7 +26,7 @@ type FormProps = {
   email: string;
   subject: string;
   body: string;
-  autoReply: boolean;
+  autoReply: "あり" | "なし";
 };
 
 export const ContactForm = () => {
@@ -36,30 +37,31 @@ export const ContactForm = () => {
       email: "",
       subject: "",
       body: "",
-      autoReply: false,
+      autoReply: "なし",
     },
   });
   const sendEvent = (values: { [key: string]: any }) => {
     console.log(values);
     const formItem = new FormData();
-    Object.keys(values).map((key) => {
-      if (key === "autoReply") {
-        formItem.append(contactFormData[key], values[key] ? "あり" : "なし");
-      } else {
-        formItem.append(contactFormData[key], values[key]);
-      }
-    });
+    Object.keys(values).map((key) => formItem.append(contactFormData[key], values[key]));
     const options = {
       method: "POST",
       body: formItem,
     };
-    fetch(contactFormData["link"], options)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+    try {
+      fetch(contactFormData["link"], { ...options, mode: "no-cors" })
+        .then(res => showNotification({ message: "送信しました、返答をお待ちください!!", autoClose: false }))
+        .then((_) => form.reset())
+        .catch(err => showNotification({ message: `エラーが発生しました,継続する場合はこちらから ${contactFormData["link"]}`, autoClose: false }))
+    } catch (err) {
+      console.log("Error");
+      console.log(err);
+      showNotification({ message: `エラーが発生しました,継続する場合はこちらから ${contactFormData["link"]}`, autoClose: false })
+    }
   };
   return (
     <div className="w-[300px] md:w-[500px]">
-      <form onSubmit={form.onSubmit((values) => sendEvent(values))}>
+      <form onSubmit={form.onSubmit(values => sendEvent(values))} >
         <TextInput
           required
           label="名前"
@@ -94,7 +96,10 @@ export const ContactForm = () => {
           minRows={4}
         />
         <div className="flex justify-center my-4">
-          <Switch label="自動返信" {...form.getInputProps("autoReply")} />
+          <RadioGroup label="自動返信" required {...form.getInputProps("autoReply")}>
+            <Radio value="あり" label="あり" />
+            <Radio value="なし" label="なし" />
+          </RadioGroup>
         </div>
         <div className="flex justify-center">
           <Button
