@@ -22,6 +22,7 @@ function App() {
         <div className="flex-flex-col snap-y snap-mandatory overflow-y-auto h-screen">
           <div className="container m-auto h-screen flex flex-col items-center justify-around snap-center snap-always">
             <div>
+              <h1 className="font-bold text-5xl my-12">My Profile</h1>
               <div>
                 <img
                   className="w-32 h-32 m-auto border rounded-full"
@@ -29,7 +30,7 @@ function App() {
                   alt="My Icon"
                 />
               </div>
-              <h1 className="font-bold text-4xl mt-4">sinsky</h1>
+              <h2 className="font-bold text-4xl mt-4">sinsky</h2>
             </div>
             <div>
               <h2 className="font-bold text-3xl mb-4 capitalize">About me</h2>
