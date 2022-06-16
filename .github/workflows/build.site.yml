@@ -34,10 +34,11 @@ jobs:
           PATTERNS: |
             docs/**/*
       - name: commit file
-        if: env.GIT_DIFF
+        # if: env.GIT_DIFF
         run: |
           git config --local user.email "60662802+sinsky@users.noreply.github.com"
           git config --local user.name "GitHub Actions bot"
+          git diff --shortstat | grep '[0-9]'
           git add docs/
           git commit -m "add build file"
       - name: Push Change
