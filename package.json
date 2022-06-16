@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && rimraf ./docs/index.html ./docs/assets/ && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sitemap": "node sitemap/createSitemap.js"
   },
   "dependencies": {
     "@mantine/core": "^4.2.8",
