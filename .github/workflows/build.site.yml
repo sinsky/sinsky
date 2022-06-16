@@ -21,6 +21,8 @@ jobs:
         run: yarn --frozen-lockfile
       - name: build build-site-file
         run: yarn build
+      - name: create sitemap
+        run: yarn sitemap
       - name: commit file
         run: |
           git config --local user.email "60662802+sinsky@users.noreply.github.com"
