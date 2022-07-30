@@ -3,7 +3,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { RadioGroup, Radio, TextInput, Button, Textarea } from "@mantine/core";
 import { showNotification } from '@mantine/notifications';
 
-const contactFormData: { [key: string]: any } = {
+const contactFormData: { [key: string]: string } = {
   name: "entry.1117731376",
   email: "entry.492585574",
   subject: "entry.1206287081",
@@ -21,14 +21,6 @@ const scheme = z.object({
   autoReply: z.string().regex(/(あり|なし)/, { message: "設定がおかしいようです..." })
 });
 
-type FormProps = {
-  name: string;
-  email: string;
-  subject: string;
-  body: string;
-  autoReply: "あり" | "なし";
-};
-
 export const ContactForm = () => {
   const form = useForm({
     schema: zodResolver(scheme),
@@ -40,7 +32,7 @@ export const ContactForm = () => {
       autoReply: "なし",
     },
   });
-  const sendEvent = (values: { [key: string]: any }) => {
+  const sendEvent = (values: { [key: string]: string }) => {
     console.log(values);
     const formItem = new FormData();
     Object.keys(values).map((key) => formItem.append(contactFormData[key], values[key]));
@@ -50,9 +42,9 @@ export const ContactForm = () => {
     };
     try {
       fetch(contactFormData["link"], { ...options, mode: "no-cors" })
-        .then(res => showNotification({ message: "送信しました、返答をお待ちください!!", autoClose: false }))
-        .then((_) => form.reset())
-        .catch(err => showNotification({ message: `エラーが発生しました,継続する場合はこちらから ${contactFormData["link"]}`, autoClose: false }))
+        .then(() => showNotification({ message: "送信しました、返答をお待ちください!!", autoClose: false }))
+        .then(() => form.reset())
+        .catch(() => showNotification({ message: `エラーが発生しました,継続する場合はこちらから ${contactFormData["link"]}`, autoClose: false }))
     } catch (err) {
       console.log("Error");
       console.log(err);
