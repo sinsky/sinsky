@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "WillLuke.nextjs.addTypesOnSave": true,
+  "WillLuke.nextjs.hasPrompted": true,
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#22329a",
+    "statusBar.foreground": "#ead191",
+    "activityBar.background": "#0e1a69",
+    "activityBar.foreground": "#ead191"
+  }
+}
