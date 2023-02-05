@@ -10,6 +10,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.9",
+    "@heroicons/react": "^2.0.14",
+    "@icons-pack/react-simple-icons": "^6.2.0",
     "@prisma/client": "^4.9.0",
     "@tanstack/react-query": "^4.20.0",
     "@trpc/client": "^10.9.0",

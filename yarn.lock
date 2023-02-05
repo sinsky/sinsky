@@ -24,6 +24,18 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@headlessui/react@^1.7.9":
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.9.tgz#fcb4cf50afbb2161cf7ea8e2301805ec05c24e49"
+  integrity sha512-Bobh/+mDciu8kEE2hvdukFYjbfaG4MEkK/6TjWOgqcODLKYpRhWPKPE+dCcCSz/YrwjFVrEAMOiWtfk6sW20/w==
+  dependencies:
+    client-only "^0.0.1"
+
+"@heroicons/react@^2.0.14":
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-2.0.14.tgz#9cc23b8978b1829239250b3d7846cff16c58e9f5"
+  integrity sha512-eFL4if6L7woL1fUvk/jjXx4z9NxVESHHrQnEd2qKVelTFTIr/3VLGWdPb0biia9ZVe26P0JSs/xmOlRNur3SrQ==
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
@@ -42,6 +54,11 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
+
+"@icons-pack/react-simple-icons@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@icons-pack/react-simple-icons/-/react-simple-icons-6.2.0.tgz#0c3823ef2cf9848b2d8ffb2f58f15bdd6b0576f9"
+  integrity sha512-YZzB5oHRvOslOIiug97dLqfhv7U0+78JOa8w5Aqxq2Ulr2bVBrqtFV+hMKXhcZjlPdFzpUrFfAJ9AHLe4FdYqQ==
 
 "@next/env@13.1.6":
   version "13.1.6"
@@ -605,7 +622,7 @@ chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-client-only@0.0.1:
+client-only@0.0.1, client-only@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
   integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
