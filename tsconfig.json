@@ -17,6 +17,7 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": "./src/",
     "paths": {
+      "@/components/*": ["./components/*"],
       "@/env/*": ["./env/*"],
       "@/public/*": ["../public/*"],
       "@/schema/*": ["./schema/*"],
