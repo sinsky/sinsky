@@ -3,7 +3,10 @@ import Notification from "@/components/notification";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { createContactSchema, type CreateContactSchema } from "@/schema/contact";
+import {
+  createContactSchema,
+  type CreateContactSchema,
+} from "@/schema/contact";
 import Layout from "../app/(home)/layout";
 import { api } from "@/utils/api";
 import { useState } from "react";
@@ -126,14 +129,18 @@ export default function Page({ }) {
               <button
                 type="submit"
                 className={
-                  "inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm  " +
+                  "flex w-20 items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm " +
                   (isSubmit
                     ? "cursor-wait bg-cyan-800"
                     : "cursor-pointer bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2")
                 }
                 disabled={isSubmit}
               >
-                送信
+                {isSubmit ? (
+                  <div className="h-5 w-5 animate-spin rounded-full border-t-2 border-cyan-300"></div>
+                ) : (
+                  "送信"
+                )}
               </button>
             </div>
           </div>
