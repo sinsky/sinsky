@@ -1,6 +1,6 @@
 import { stringify } from "querystring";
 import { env } from "@/env/server.mjs";
-import { Contact } from "@prisma/client";
+import { type Contact } from "@prisma/client";
 
 export const LineNotification = (data: Contact) => {
   fetch("https://notify-api.line.me/api/notify", {
