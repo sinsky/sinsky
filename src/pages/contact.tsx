@@ -125,7 +125,12 @@ export default function Page({ }) {
             <div className="flex-shrink-0">
               <button
                 type="submit"
-                className="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                className={
+                  "inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm  " +
+                  (isSubmit
+                    ? "cursor-wait bg-cyan-800"
+                    : "cursor-pointer bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2")
+                }
                 disabled={isSubmit}
               >
                 送信
