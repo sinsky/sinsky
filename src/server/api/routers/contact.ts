@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { createContactSchema } from "@/schema/contact";
+import { createContactSchema, getContactSchema } from "@/schema/contact";
 
 export const contactRouter = createTRPCRouter({
   create: publicProcedure
@@ -8,4 +8,12 @@ export const contactRouter = createTRPCRouter({
       async ({ ctx, input }) =>
         await ctx.prisma.contact.create({ data: { ...input } })
     ),
+  getContact: publicProcedure.input(getContactSchema).query(
+    async ({ ctx, input }) =>
+      await ctx.prisma.contact.findUnique({
+        where: {
+          id: input.cuid,
+        },
+      })
+  ),
 });

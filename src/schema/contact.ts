@@ -13,3 +13,7 @@ export const createContactSchema = z.object({
 });
 
 export type CreateContactSchema = z.TypeOf<typeof createContactSchema>;
+
+export const getContactSchema = z.object({
+  cuid: z.string().cuid("不正な値です"),
+});
