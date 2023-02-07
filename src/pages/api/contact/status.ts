@@ -3,15 +3,17 @@ import { appRouter } from "@/server/api/root";
 import { prisma } from "@/server/db";
 import { LineNotification } from "@/utils/notify.line";
 
-type TestRes = {
-  status: boolean;
-};
+type Response =
+  | { status: true; cuid: string }
+  | {
+      status: false;
+    };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<TestRes>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   const cuid = req.query.cuid;
   if (cuid) {
-    res.status(200).send({ status: true });
     const id = Array.isArray(cuid) ? cuid.flat(Infinity).join("") : cuid;
+    res.status(200).send({ status: true, cuid: id });
     const caller = appRouter.createCaller({
       prisma,
     });
