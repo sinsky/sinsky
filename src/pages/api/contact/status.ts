@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { appRouter } from "@/server/api/root";
-import { stringify } from "querystring";
-import { env } from "@/env/server.mjs";
 import { prisma } from "@/server/db";
 import { LineNotification } from "@/utils/notify.line";
 
