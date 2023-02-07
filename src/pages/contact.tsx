@@ -3,7 +3,7 @@ import Notification from "@/components/notification";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { createContactSchema, CreateContactSchema } from "@/schema/contact";
+import { createContactSchema, type CreateContactSchema } from "@/schema/contact";
 import Layout from "../app/(home)/layout";
 import { api } from "@/utils/api";
 import { useState } from "react";
