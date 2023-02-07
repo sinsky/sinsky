@@ -41,11 +41,15 @@ export default function Page({ }) {
     resolver: zodResolver(createContactSchema),
   });
   const createContact = api.contact.create.useMutation({
-    onSuccess() {
+    onSuccess(data) {
       reset();
       setSuccessNotificationData();
       setShow(true);
       setSubmit(false);
+      const cuid = data.id;
+      fetch(`/api/contact/status?cuid=${cuid}`).catch((err) =>
+        console.warn(err)
+      );
     },
     onError(error) {
       console.error(error);
