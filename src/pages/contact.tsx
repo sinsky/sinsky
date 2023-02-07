@@ -9,6 +9,7 @@ import { api } from "@/utils/api";
 import { useState } from "react";
 
 export default function Page({ }) {
+  const [isSubmit, setSubmit] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [notificationData, setNotificationData] = useState<{
     status: "success" | "error";
@@ -41,11 +42,13 @@ export default function Page({ }) {
       reset();
       setSuccessNotificationData();
       setShow(true);
+      setSubmit(false);
     },
     onError(error) {
       console.error(error);
       setErrorNotificationData();
       setShow(true);
+      setSubmit(false);
     },
   });
 
@@ -58,7 +61,10 @@ export default function Page({ }) {
       </div>
       <form
         className="relative"
-        onSubmit={handleSubmit((data) => createContact.mutate({ ...data }))}
+        onSubmit={handleSubmit((data) => {
+          setSubmit(true);
+          createContact.mutate({ ...data });
+        })}
       >
         <div className="overflow-hidden rounded-lg border border-gray-300 shadow-sm focus-within:border-cyan-500 focus-within:ring-1 focus-within:ring-cyan-500">
           <label htmlFor="replyEmail" className="sr-only">
@@ -120,6 +126,7 @@ export default function Page({ }) {
               <button
                 type="submit"
                 className="inline-flex items-center rounded-md border border-transparent bg-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                disabled={isSubmit}
               >
                 送信
               </button>
