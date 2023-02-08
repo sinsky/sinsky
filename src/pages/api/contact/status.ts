@@ -18,7 +18,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
       prisma,
     });
     const data = await caller.contact.getContact({ cuid: id });
-    if (data) LineNotification(data);
+    if (data) {
+      const message = [
+        "",
+        "問い合わせがありました",
+        `[Email]`,
+        `${data.replyEmail}`,
+        `[subject]`,
+        `${data.subject}`,
+        `[body]`,
+        `${data.body}`,
+      ].join("\n");
+      LineNotification(message);
+    } else {
+      LineNotification(
+        "\n問い合わせがありましたが、データが取得できませんでした"
+      );
+    }
   } else {
     res.status(200).send({ status: false });
   }
