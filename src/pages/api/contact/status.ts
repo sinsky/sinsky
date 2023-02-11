@@ -13,7 +13,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   const cuid = req.query.cuid;
   if (cuid) {
     const id = Array.isArray(cuid) ? cuid.flat(Infinity).join("") : cuid;
-    res.status(200).send({ status: true, cuid: id });
     const caller = appRouter.createCaller({
       prisma,
     });
@@ -35,6 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
         "\n問い合わせがありましたが、データが取得できませんでした"
       );
     }
+    res.status(200).send({ status: true, cuid: id });
   } else {
     res.status(200).send({ status: false });
   }
