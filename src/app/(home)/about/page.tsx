@@ -5,49 +5,49 @@ import Title from "@/ui/title";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
 import type { IconType as SiIconType } from "@icons-pack/react-simple-icons";
-import { Qiita, Twitter } from "@icons-pack/react-simple-icons";
+import { Siqiita, Sitwitter } from "@icons-pack/react-simple-icons";
 import {
-  C,
-  Deno,
-  Javascript,
-  Php,
-  Python,
-  Rust,
-  Typescript,
-  Trpc,
+  Sic,
+  Sideno,
+  Sijavascript,
+  Siphp,
+  Sipython,
+  Sirust,
+  Sitypescript,
+  Sitrpc,
 } from "@icons-pack/react-simple-icons";
 import {
-  Django,
-  Flask,
-  Jest,
-  Nextdotjs,
-  Playwright,
-  ReactJs,
-  Selenium,
-  Vite,
+  Sidjango,
+  Siflask,
+  Sijest,
+  Sinextdotjs,
+  Siplaywright,
+  Sireact,
+  Siselenium,
+  Sivite,
 } from "@icons-pack/react-simple-icons";
 import {
-  Amazonaws,
-  Googlecloud,
-  Microsoftazure,
+  Siamazonaws,
+  Sigooglecloud,
+  Simicrosoftazure,
 } from "@icons-pack/react-simple-icons";
 import {
-  Circleci,
-  Jenkins,
-  Githubactions,
+  Sicircleci,
+  Sijenkins,
+  Sigithubactions,
 } from "@icons-pack/react-simple-icons";
 import {
-  Cloudflarepages,
-  Githubpages,
-  Netlify,
-  Vercel,
+  Sicloudflarepages,
+  Sigithubpages,
+  Sinetlify,
+  Sivercel,
 } from "@icons-pack/react-simple-icons";
 import {
-  Docker,
-  Git,
-  Gitea,
-  Github,
-  Visualstudiocode,
+  Sidocker,
+  Sigit,
+  Sigitea,
+  Sigithub,
+  Sivisualstudiocode,
 } from "@icons-pack/react-simple-icons";
 
 const Account = ({
@@ -164,17 +164,17 @@ export default function Page() {
           <div className="flex flex-wrap justify-center gap-8 m-4 sm:justify-start sm:gap-2">
             <Account
               label={"GitHub"}
-              Icon={Github}
+              Icon={Sigithub}
               link="https://github.com/sinsky"
             />
             <Account
               label={"Qiita"}
-              Icon={Qiita}
+              Icon={Siqiita}
               link="https://qiita.com/sinsky"
             />
             <Account
               label={"Twitter"}
-              Icon={Twitter}
+              Icon={Sitwitter}
               link="https://twitter.com/sin_sky_"
             />
           </div>
@@ -184,47 +184,47 @@ export default function Page() {
         <h2 className="text-3xl font-bold">Skills</h2>
         <div className="mx-4 my-2">
           <SkillArea title="言語">
-            <Skill label="C" Icon={C} />
-            <Skill label="Deno" Icon={Deno} />
-            <Skill label="JavaScript" Icon={Javascript} />
-            <Skill label="PHP" Icon={Php} />
-            <Skill label="Python" Icon={Python} />
-            <Skill label="Rust" Icon={Rust} />
-            <Skill label="TypeScript" Icon={Typescript} />
+            <Skill label="C" Icon={Sic} />
+            <Skill label="Deno" Icon={Sideno} />
+            <Skill label="JavaScript" Icon={Sijavascript} />
+            <Skill label="PHP" Icon={Siphp} />
+            <Skill label="Python" Icon={Sipython} />
+            <Skill label="Rust" Icon={Sirust} />
+            <Skill label="TypeScript" Icon={Sitypescript} />
           </SkillArea>
           <SkillArea title="フレームワーク">
-            <Skill label="Django" Icon={Django} />
-            <Skill label="Flask" Icon={Flask} />
-            <Skill label="Jest" Icon={Jest} />
-            <Skill label="Next.js" Icon={Nextdotjs} />
-            <Skill label="Playwright" Icon={Playwright} />
-            <Skill label="React" Icon={ReactJs} />
-            <Skill label="Selenium" Icon={Selenium} />
-            <Skill label="Vite" Icon={Vite} />
-            <Skill label="tRPC" Icon={Trpc} />
+            <Skill label="Django" Icon={Sidjango} />
+            <Skill label="Flask" Icon={Siflask} />
+            <Skill label="Jest" Icon={Sijest} />
+            <Skill label="Next.js" Icon={Sinextdotjs} />
+            <Skill label="Playwright" Icon={Siplaywright} />
+            <Skill label="React" Icon={Sireact} />
+            <Skill label="Selenium" Icon={Siselenium} />
+            <Skill label="Vite" Icon={Sivite} />
+            <Skill label="tRPC" Icon={Sitrpc} />
           </SkillArea>
           <SkillArea title="クラウド">
-            <Skill label="AWS" Icon={Amazonaws} />
-            <Skill label="Google Cloud" Icon={Googlecloud} />
-            <Skill label="Microsoft Azure" Icon={Microsoftazure} />
+            <Skill label="AWS" Icon={Siamazonaws} />
+            <Skill label="Google Cloud" Icon={Sigooglecloud} />
+            <Skill label="Microsoft Azure" Icon={Simicrosoftazure} />
           </SkillArea>
           <SkillArea title="CI/CD">
-            <Skill label="CircleCI" Icon={Circleci} />
-            <Skill label="Jenkins" Icon={Jenkins} />
-            <Skill label="GitHub Actions" Icon={Githubactions} />
+            <Skill label="CircleCI" Icon={Sicircleci} />
+            <Skill label="Jenkins" Icon={Sijenkins} />
+            <Skill label="GitHub Actions" Icon={Sigithubactions} />
           </SkillArea>
           <SkillArea title="PaaS">
-            <Skill label="Cloudflare Pages" Icon={Cloudflarepages} />
-            <Skill label="GitHub Pages" Icon={Githubpages} />
-            <Skill label="Netlify" Icon={Netlify} />
-            <Skill label="Vercel" Icon={Vercel} />
+            <Skill label="Cloudflare Pages" Icon={Sicloudflarepages} />
+            <Skill label="GitHub Pages" Icon={Sigithubpages} />
+            <Skill label="Netlify" Icon={Sinetlify} />
+            <Skill label="Vercel" Icon={Sivercel} />
           </SkillArea>
           <SkillArea title="環境">
-            <Skill label="Docker" Icon={Docker} />
-            <Skill label="Git" Icon={Git} />
-            <Skill label="Gitea" Icon={Gitea} />
-            <Skill label="GitHub" Icon={Github} />
-            <Skill label="VisualStudio Code" Icon={Visualstudiocode} />
+            <Skill label="Docker" Icon={Sidocker} />
+            <Skill label="Git" Icon={Sigit} />
+            <Skill label="Gitea" Icon={Sigitea} />
+            <Skill label="GitHub" Icon={Sigithub} />
+            <Skill label="VisualStudio Code" Icon={Sivisualstudiocode} />
           </SkillArea>
         </div>
       </section>
