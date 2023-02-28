@@ -12,6 +12,8 @@ import { api } from "@/utils/api";
 import { useState } from "react";
 
 export default function Page({ }) {
+  // FIXME appディレクトリに移行、tRPCからnewtの問い合わせフォームを利用する形に変更した方が良さそう
+  // https://www.newt.so/form-app
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [notificationData, setNotificationData] = useState<{
