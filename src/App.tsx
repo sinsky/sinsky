@@ -1,6 +1,6 @@
 import { FaTwitterSquare, FaGithubSquare } from "react-icons/fa";
 import { useState } from "react";
-import { NotificationsProvider } from '@mantine/notifications';
+import { NotificationsProvider } from "@mantine/notifications";
 import { ContactForm } from "./Contact";
 import MySkill from "./MySkill.json";
 
@@ -37,7 +37,10 @@ function App() {
               <div className="flex justify-around">
                 <div>
                   <a href="https://twitter.com/sin_sky_">
-                    <FaTwitterSquare size={40} className="hover:text-blue-500" />
+                    <FaTwitterSquare
+                      size={40}
+                      className="hover:text-blue-500"
+                    />
                   </a>
                 </div>
                 <div>
@@ -74,7 +77,9 @@ function App() {
           </div>
           <div className="container flex flex-col items-center justify-around h-screen m-auto snap-center snap-always">
             <div>
-              <h2 className="mb-4 text-3xl font-bold capitalize">Other skills</h2>
+              <h2 className="mb-4 text-3xl font-bold capitalize">
+                Other skills
+              </h2>
               <div className="flex flex-col">
                 <div className="grid grid-cols-2 gap-4 py-4 font-bold border-b border-teal-800">
                   <div></div>
