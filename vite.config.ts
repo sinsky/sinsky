@@ -1,14 +1,10 @@
 import { defineConfig } from "vite";
-import Pages from "vite-plugin-pages";
-import generateSitemap from "vite-plugin-pages-sitemap";
 import react from "@vitejs/plugin-react";
+import Sitemap from "vite-plugin-sitemap";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    Pages({ onRoutesGenerated: (routes) => generateSitemap({ routes }) }),
-  ],
+  plugins: [react(), Sitemap({ outDir: "./docs" })],
   base: "./",
   build: {
     outDir: "./docs",
