@@ -4,7 +4,14 @@ import Sitemap from "vite-plugin-sitemap";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), Sitemap({ outDir: "./docs" })],
+  plugins: [
+    react(),
+    Sitemap({
+      outDir: "./docs",
+      hostname: "https://sinsky.dev",
+      generateRobotsTxt: true,
+    }),
+  ],
   base: "./",
   build: {
     outDir: "./docs",
