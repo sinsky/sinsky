@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "sitemap": "node sitemap/createSitemap.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@mantine/core": "^7.3.2",
