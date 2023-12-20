@@ -12,6 +12,7 @@ export default defineConfig({
       outDir,
       hostname: "https://sinsky.dev",
       generateRobotsTxt: true,
+      dynamicRoutes: ["/work"],
     }),
   ],
   base: "./",
