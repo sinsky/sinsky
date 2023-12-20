@@ -1,3 +1,5 @@
+import Skills from "./Intro/Skills";
+
 export default function Introduction() {
   return (
     <div>
@@ -11,8 +13,7 @@ export default function Introduction() {
         {/* TODO: 趣味の追加 */}
       </section>
       <section>
-        <h2>スキル</h2>
-        {/* TODO: スキルの追加 */}
+        <Skills />
       </section>
       <section>
         <h2>経歴</h2>
