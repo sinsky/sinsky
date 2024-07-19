@@ -4,6 +4,8 @@
 
 Go to [MySite](https://sinsky.dev)!
 
+Recently I've been using the self-hosted forgejo.😶‍🌫️
+
 <!--
 **sinsky/sinsky** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
