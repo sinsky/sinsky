@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sinsky/sinsky/badge)](https://www.codefactor.io/repository/github/sinsky/sinsky)
 
-Go to [MySite](https://sinsky.dev)!
+Go to [MySite](https://sinsky.me)!
 
 Recently I've been using the self-hosted [forgejo](https://codeberg.org/forgejo/forgejo).😶‍🌫️
 
