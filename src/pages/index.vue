@@ -13,8 +13,9 @@ useSeoMeta({
   ogLocale: "ja",
   themeColor: "#cbd5e1",
 });
+import Top from "@/components/Top.vue";
 </script>
 
 <template>
-  <h1>I am sinsky.</h1>
+  <Top />
 </template>
