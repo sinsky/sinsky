@@ -18,4 +18,5 @@ import Top from "@/components/Top.vue";
 
 <template>
   <Top />
+  <section class="relative z-20 bg-slate-500 min-h-svh">dummy area</section>
 </template>
