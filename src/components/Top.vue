@@ -5,9 +5,12 @@ import LineMdTwitterX from "~icons/line-md/twitter-x?width=24px&height=24px";
 
 defineProps<{ bgColor: string }>();
 
-// import { orange } from "tailwindcss/colors";
-// const orange700 = orange["700"];
-const hoverDropShadowOrange700 = `hover:drop-shadow-[0_0_.3rem_#c2410c]`;
+import { orange } from "tailwindcss/colors";
+const orange700 = orange["700"];
+const shadowColor = {
+  "--shadow-color": orange700,
+};
+const hoverDropShadow = `hover:drop-shadow-[0_0_.3rem_var(--shadow-color)]`;
 </script>
 
 <template>
@@ -21,19 +24,19 @@ const hoverDropShadowOrange700 = `hover:drop-shadow-[0_0_.3rem_#c2410c]`;
     </div>
     <div class="flex flex-col items-center justify-center w-full gap-4 mb-8">
       <h2 class="text-2xl font-bold">Social Media</h2>
-      <ul class="flex gap-4">
+      <ul class="flex gap-4" :style="shadowColor">
         <li>
           <a href="https://github.com/sinsky"
             ><LineMdGithubLoop
               class="transition-all size-8 will-change-auto"
-              :class="hoverDropShadowOrange700"
+              :class="hoverDropShadow"
           /></a>
         </li>
         <li>
           <a href="https://x.com/sin_sky_"
             ><LineMdTwitterX
               class="transition-all size-8 will-change-auto"
-              :class="hoverDropShadowOrange700"
+              :class="hoverDropShadow"
           /></a>
         </li>
       </ul>
