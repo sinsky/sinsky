@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import LineMdGithubLoop from "~icons/line-md/github-loop?width=24px&height=24px";
+import LineMdTwitterX from "~icons/line-md/twitter-x?width=24px&height=24px";
 
 defineProps<{ bgColor: string }>();
+
+// import { orange } from "tailwindcss/colors";
+// const orange700 = orange["700"];
+const hoverDropShadowOrange700 = `hover:drop-shadow-[0_0_.3rem_#c2410c]`;
 </script>
 
 <template>
@@ -17,10 +23,18 @@ defineProps<{ bgColor: string }>();
       <h2 class="text-2xl font-bold">Social Media</h2>
       <ul class="flex gap-4">
         <li>
-          <a href="https://github.com/sinsky">GitHub</a>
+          <a href="https://github.com/sinsky"
+            ><LineMdGithubLoop
+              class="transition-all size-8 will-change-auto"
+              :class="hoverDropShadowOrange700"
+          /></a>
         </li>
         <li>
-          <a href="https://x.com/sin_sky_">Twitter</a>
+          <a href="https://x.com/sin_sky_"
+            ><LineMdTwitterX
+              class="transition-all size-8 will-change-auto"
+              :class="hoverDropShadowOrange700"
+          /></a>
         </li>
       </ul>
     </div>
