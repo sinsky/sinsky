@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+defineProps<{ bgColor: string }>();
 </script>
 
 <template>
-  <section class="relative z-10 flex flex-col h-[80svh] frame">
+  <section class="relative z-10 flex flex-col h-[80svh] frame" :class="bgColor">
     <div class="flex flex-col items-center justify-center flex-1">
       <Avatar size="lg">
         <AvatarImage src="https://github.com/sinsky.png" alt="@sinsky" />
