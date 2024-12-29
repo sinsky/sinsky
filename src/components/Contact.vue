@@ -50,6 +50,7 @@ const onSubmit = handleSubmit(async (values) => {
           title: "送信完了",
           description: "確認後、返答いたします。",
         });
+        form.resetForm();
       } else {
         toast({
           title: "送信エラー",
