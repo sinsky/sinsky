@@ -17,6 +17,8 @@ import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
+
 const formSchema = toTypedSchema(
   z.object({
     name: z.string().min(1, { message: "お名前を入力してください" }).max(50),
@@ -79,7 +81,7 @@ const onSubmit = handleSubmit(async (values) => {
             <FormControl>
               <Input
                 type="text"
-                placeholder="shadcn"
+                placeholder="sinsky"
                 v-bind="componentField"
                 class="border-slate-700"
               />
@@ -94,7 +96,7 @@ const onSubmit = handleSubmit(async (values) => {
             <FormControl>
               <Input
                 type="email"
-                placeholder="sinsky"
+                :placeholder="contactEmail"
                 v-bind="componentField"
                 class="border-slate-700"
               />
