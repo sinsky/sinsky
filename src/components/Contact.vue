@@ -80,7 +80,7 @@ const onSubmit = handleSubmit(async (values) => {
         netlify
         netlify-honeypot="bot-field"
       >
-        <Input type="hidden" name="form-name" value="Contact" />
+        <Input type="hidden" name="form-name" default-value="Contact" />
         <div hidden>
           <label>
             あなたが人間なら、これを記入しないでください:
