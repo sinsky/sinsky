@@ -93,7 +93,7 @@ const onSubmit = handleSubmit(async (values) => {
             <FormControl>
               <Input
                 type="email"
-                placeholder="shadcn"
+                placeholder="sinsky"
                 v-bind="componentField"
                 class="border-slate-700"
               />
