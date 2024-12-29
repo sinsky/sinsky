@@ -21,6 +21,8 @@ const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
 
 const formSchema = toTypedSchema(
   z.object({
+    "bot-field": z.string().default(""),
+    "form-name": z.string().default("Contact"),
     name: z.string().min(1, { message: "お名前を入力してください" }).max(50),
     email: z.string().email("有効なメールアドレスを入力してください"),
     description: z
@@ -79,13 +81,19 @@ const onSubmit = handleSubmit(async (values) => {
         class="[&>*:not(:last-child)]:mb-8"
         netlify
         netlify-honeypot="bot-field"
+        name="Contact"
       >
-        <Input type="hidden" name="form-name" default-value="Contact" />
+        <FormField v-slot="{ componentField }" name="form-name">
+          <Input type="hidden" v-bind="componentField" value="Contact" />
+        </FormField>
         <div hidden>
-          <label>
-            あなたが人間なら、これを記入しないでください:
-            <Input name="bot-field" />
-          </label>
+          <FormField v-slot="{ componentField }" name="bot-field">
+            <FormLabel>bot-field</FormLabel>
+            <Input type="hidden" v-bind="componentField" />
+            <FormDescription
+              >あなたが人間なら、これを記入しないでください</FormDescription
+            >
+          </FormField>
         </div>
         <FormField v-slot="{ componentField }" name="name">
           <FormItem>
