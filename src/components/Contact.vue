@@ -21,7 +21,7 @@ const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
 
 const formSchema = toTypedSchema(
   z.object({
-    "bot-field": z.string().optional(),
+    "bot-field": z.string().default(""),
     "form-name": z.string().default("Contact"),
     name: z.string().min(1, { message: "お名前を入力してください" }).max(50),
     email: z.string().email("有効なメールアドレスを入力してください"),
