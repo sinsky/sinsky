@@ -81,6 +81,7 @@ const onSubmit = handleSubmit(async (values) => {
         class="[&>*:not(:last-child)]:mb-8"
         netlify
         netlify-honeypot="bot-field"
+        name="Contact"
       >
         <FormField v-slot="{ componentField }" name="form-name">
           <Input type="hidden" v-bind="componentField" value="Contact" />
