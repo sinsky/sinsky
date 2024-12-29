@@ -14,9 +14,10 @@ useSeoMeta({
   themeColor: "#cbd5e1",
 });
 import Top from "@/components/Top.vue";
+import Skills from "@/components/Skills.vue";
 </script>
 
 <template>
   <Top bg-color="bg-slate-200 dark:bg-slate-800" />
-  <section class="relative z-20 bg-slate-500 min-h-svh">dummy area</section>
+  <Skills bg-color="bg-teal-200 dark:bg-teal-800" />
 </template>
