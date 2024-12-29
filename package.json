@@ -36,6 +36,7 @@
     "vite": "^6.0.5",
     "vite-plugin-vue-devtools": "^7.6.8",
     "vite-ssg": "^0.24.3",
+    "vitest": "^2.1.8",
     "vue-router": "^4.5.0",
     "vue-tsc": "^2.2.0"
   }
