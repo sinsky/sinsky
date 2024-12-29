@@ -74,7 +74,19 @@ const onSubmit = handleSubmit(async (values) => {
   <section class="relative z-30 py-16" :class="bgColor">
     <h2 class="text-center">Contact</h2>
     <div class="container max-w-lg mx-auto">
-      <form @submit="onSubmit" class="[&>*:not(:last-child)]:mb-8">
+      <form
+        @submit="onSubmit"
+        class="[&>*:not(:last-child)]:mb-8"
+        netlify
+        netlify-honeypot="bot-field"
+      >
+        <Input type="hidden" name="form-name" default-value="Contact" />
+        <div hidden>
+          <label>
+            あなたが人間なら、これを記入しないでください:
+            <Input name="bot-field" />
+          </label>
+        </div>
         <FormField v-slot="{ componentField }" name="name">
           <FormItem>
             <FormLabel>お名前</FormLabel>
