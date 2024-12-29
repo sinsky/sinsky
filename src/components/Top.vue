@@ -5,7 +5,8 @@ import LineMdTwitterX from "~icons/line-md/twitter-x?width=24px&height=24px";
 
 defineProps<{ bgColor: string }>();
 
-import { orange } from "tailwindcss/colors";
+import colors from "tailwindcss/colors";
+const { orange } = colors;
 const orange700 = orange["700"];
 const shadowColor = {
   "--shadow-color": orange700,
