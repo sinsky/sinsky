@@ -83,7 +83,7 @@ const onSubmit = handleSubmit(async (values) => {
         netlify-honeypot="bot-field"
       >
         <FormField v-slot="{ componentField }" name="form-name">
-          <Input type="hidden" v-bind="componentField" />
+          <Input type="hidden" v-bind="componentField" value="Contact" />
         </FormField>
         <div hidden>
           <FormField v-slot="{ componentField }" name="bot-field">
