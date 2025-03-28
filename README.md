@@ -1,4 +1,4 @@
-# Hello, I'm Sinsky 👋
+# Hello, I'm sinsky 👋
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sinsky/sinsky/badge)](https://www.codefactor.io/repository/github/sinsky/sinsky)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/a40499b7-5198-452a-a089-9ba673a74454/deploy-status)](https://app.netlify.com/sites/sinsky/deploys)
