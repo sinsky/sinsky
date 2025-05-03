@@ -4,5 +4,5 @@ import { Toaster } from '@/components/ui/sonner'
 
 <template>
   <router-view></router-view>
-  <Toaster richColors />
+  <Toaster richColors closeButton />
 </template>
