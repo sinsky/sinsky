@@ -11,8 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/toast/use-toast";
-
+import { toast } from 'vue-sonner'
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
@@ -34,38 +33,34 @@ const formSchema = toTypedSchema(
 const form = useForm({
   validationSchema: formSchema,
 });
-const { isSubmitting, handleSubmit } = form;
 
-const { toast } = useToast();
+const { isSubmitting } = form;
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = form.handleSubmit((values) => {
   try {
     const formData = new URLSearchParams(
       values as Record<string, string>,
     ).toString();
     console.log(formData);
-    await fetch("/", {
+    fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData,
     }).then((res) => {
       if (res.status === 200) {
-        toast({
-          title: "送信完了",
+        toast.success("送信完了", {
           description: "確認後、返答いたします。",
         });
         form.resetForm();
       } else {
-        toast({
-          title: "送信エラー",
+        toast.error("送信エラー", {
           description: "お手数ですが、再度送信してください。",
         });
       }
     });
   } catch (error) {
     console.error("フォーム送信エラー:", error);
-    toast({
-      title: "送信エラー",
+    toast.error("送信エラー", {
       description: "お手数ですが、再度送信してください。",
     });
   }
