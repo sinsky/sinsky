@@ -33,9 +33,8 @@ const formSchema = toTypedSchema(
 const form = useForm({
   validationSchema: formSchema,
 });
-const { isSubmitting, handleSubmit } = form;
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = form.handleSubmit(async (values) => {
   try {
     const formData = new URLSearchParams(
       values as Record<string, string>,
@@ -138,8 +137,8 @@ const onSubmit = handleSubmit(async (values) => {
           </FormItem>
         </FormField>
         <div class="flex justify-end">
-          <Button type="submit" :disabled="isSubmitting">
-            <span v-if="isSubmitting">送信中...</span>
+          <Button type="submit" :disabled="form.isSubmitting">
+            <span v-if="form.isSubmitting">送信中...</span>
             <span v-else>送信</span>
           </Button>
         </div>
