@@ -34,13 +34,13 @@ const form = useForm({
   validationSchema: formSchema,
 });
 
-const onSubmit = form.handleSubmit(async (values) => {
+const onSubmit = form.handleSubmit((values) => {
   try {
     const formData = new URLSearchParams(
       values as Record<string, string>,
     ).toString();
     console.log(formData);
-    await fetch("/", {
+    fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formData,
