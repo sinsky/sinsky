@@ -24,7 +24,7 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.289",
+    "@iconify/json": "^2.2.334",
     "@types/node": "^22.15.3",
     "@unhead/vue": "^1.11.14",
     "@vitejs/plugin-vue": "^5.2.1",
