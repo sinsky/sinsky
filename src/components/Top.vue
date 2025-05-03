@@ -17,7 +17,7 @@ const hoverDropShadow = `hover:drop-shadow-[0_0_.3rem_var(--shadow-color)]`;
 <template>
   <section class="relative z-10 flex flex-col h-[80svh] frame" :class="bgColor">
     <div class="flex flex-col items-center justify-center flex-1">
-      <Avatar size="lg">
+      <Avatar class="size-32">
         <AvatarImage src="https://github.com/sinsky.png" alt="@sinsky" />
         <AvatarFallback>SS</AvatarFallback>
       </Avatar>
