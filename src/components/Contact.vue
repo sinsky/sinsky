@@ -34,6 +34,8 @@ const form = useForm({
   validationSchema: formSchema,
 });
 
+const { isSubmitting } = form;
+
 const onSubmit = form.handleSubmit((values) => {
   try {
     const formData = new URLSearchParams(
@@ -137,8 +139,8 @@ const onSubmit = form.handleSubmit((values) => {
           </FormItem>
         </FormField>
         <div class="flex justify-end">
-          <Button type="submit" :disabled="form.isSubmitting">
-            <span v-if="form.isSubmitting">送信中...</span>
+          <Button type="submit" :disabled="isSubmitting">
+            <span v-if="isSubmitting">送信中...</span>
             <span v-else>送信</span>
           </Button>
         </div>
