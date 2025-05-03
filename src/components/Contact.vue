@@ -11,11 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/toast/use-toast";
-
+import { toast } from 'vue-sonner'
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
+import { markRaw } from "vue";
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
 
@@ -36,8 +36,6 @@ const form = useForm({
 });
 const { isSubmitting, handleSubmit } = form;
 
-const { toast } = useToast();
-
 const onSubmit = handleSubmit(async (values) => {
   try {
     const formData = new URLSearchParams(
@@ -50,22 +48,19 @@ const onSubmit = handleSubmit(async (values) => {
       body: formData,
     }).then((res) => {
       if (res.status === 200) {
-        toast({
-          title: "送信完了",
+        toast.success("送信完了", {
           description: "確認後、返答いたします。",
         });
         form.resetForm();
       } else {
-        toast({
-          title: "送信エラー",
+        toast.error("送信エラー", {
           description: "お手数ですが、再度送信してください。",
         });
       }
     });
   } catch (error) {
     console.error("フォーム送信エラー:", error);
-    toast({
-      title: "送信エラー",
+    toast.error("送信エラー", {
       description: "お手数ですが、再度送信してください。",
     });
   }
