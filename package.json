@@ -27,7 +27,7 @@
     "@iconify/json": "^2.2.334",
     "@types/node": "^22.15.3",
     "@unhead/vue": "^1.11.14",
-    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue": "^5.2.3",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "autoprefixer": "^10.4.21",
