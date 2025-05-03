@@ -15,7 +15,6 @@ import { toast } from 'vue-sonner'
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
-import { markRaw } from "vue";
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
 
