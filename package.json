@@ -10,6 +10,14 @@
     "test": "vitest",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md,html}": [
+      "prettier --write"
+    ]
+  },
   "dependencies": {
     "@radix-icons/vue": "^1.0.0",
     "@tailwindcss/vite": "^4.1.5",
