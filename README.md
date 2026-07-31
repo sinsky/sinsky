@@ -13,24 +13,23 @@ Cloudflare Worker "sinsky"
 
 - Frontend: Vue 3 + vite-ssg + Tailwind CSS v4
 - Hero: three Fancy-Border-Radius fluid bubbles linking to Profile / Skills / Contact
-- Package manager: [aube](https://github.com/jdx/aube) (workspaces via `pnpm-workspace.yaml`)
+- Package manager: pnpm (managed via [mise](https://mise.jdx.dev/), workspaces via `pnpm-workspace.yaml`)
 
 ## Local development
 
 ```sh
-mise use aube@latest      # or: brew install jdx/tap/aube
-aube install -r
+mise install
 
 # frontend
-aube run dev
+pnpm run dev
 
 # worker (separate terminal)
 cd worker
 cp .dev.vars.example .dev.vars       # optional: set SLACK_WEBHOOK_URL
-aube run dev
+pnpm run dev
 ```
 
-The Worker dev server proxies `../dist`, so build the frontend first (`aube run build`) if you want to preview the SPA through the Worker.
+The Worker dev server proxies `../dist`, so build the frontend first (`pnpm run build`) if you want to preview the SPA through the Worker.
 
 ## Type generation
 
@@ -38,7 +37,7 @@ After editing `worker/wrangler.jsonc`, regenerate `worker/worker-configuration.d
 
 ```sh
 cd worker
-aube run types        # wrangler types
+pnpm run types        # wrangler types
 ```
 
 Secrets (like `SLACK_WEBHOOK_URL`) are not in the generated `Env`. They are augmented in `worker/src/worker.d.ts`.
@@ -48,16 +47,16 @@ Secrets (like `SLACK_WEBHOOK_URL`) are not in the generated `Env`. They are augm
 Single Worker + Assets deploy (after the frontend is built):
 
 ```sh
-aube run build
+pnpm run build
 cd worker
-aube run deploy      # wrangler deploy  (uploads ../dist as assets + worker code)
+pnpm run deploy      # wrangler deploy  (uploads ../dist as assets + worker code)
 ```
 
 Set the secret on first deploy:
 
 ```sh
 cd worker
-aube exec wrangler secret put SLACK_WEBHOOK_URL
+pnpm exec wrangler secret put SLACK_WEBHOOK_URL
 ```
 
 Map the Worker to `sinsky.me` in the Cloudflare dashboard (Workers & Pages → sinisky → Settings → Domains & Routes). No separate Pages project or `api.sinsky.me` Worker is needed.
