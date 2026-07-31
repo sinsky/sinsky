@@ -4,22 +4,28 @@ import { useSeoMeta } from "@unhead/vue";
 useSeoMeta({
   charset: "utf-8",
   title: "sinsky.me",
-  description: "やっほー！sinskyのプロフィールページへようこそ！",
+  description: "sinskyのプロフィールページへようこそ！",
   ogImage: "https://github.com/sinsky.png",
-  ogDescription: "やっほー！sinskyのプロフィールページへようこそ！",
+  ogDescription: "sinskyのプロフィールページへようこそ！",
   ogSiteName: "sinsky.me",
   ogType: "website",
   ogUrl: "https://sinsky.me",
   ogLocale: "ja",
-  themeColor: "#cbd5e1",
+  themeColor: "#fbcfe8",
 });
-import Top from "@/components/Top.vue";
+import Hero from "@/components/Hero.vue";
+import Profile from "@/components/Profile.vue";
 import Skills from "@/components/Skills.vue";
 import Contact from "@/components/Contact.vue";
+import SectionNav from "@/components/SectionNav.vue";
 </script>
 
 <template>
-  <Top bg-color="bg-slate-200 dark:bg-slate-800" />
-  <Skills bg-color="bg-teal-200 dark:bg-teal-800" />
-  <Contact bg-color="bg-slate-200 dark:bg-slate-800" />
+  <main>
+    <Hero />
+    <Profile bg-color="bg-pink-100" />
+    <Skills bg-color="bg-emerald-50" />
+    <Contact bg-color="bg-violet-100" />
+    <SectionNav />
+  </main>
 </template>

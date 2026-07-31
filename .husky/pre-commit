@@ -1,5 +1,2 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-bunx lint-staged
-bun run test
+mise x -- pnpm exec lint-staged
+mise x -- pnpm run test

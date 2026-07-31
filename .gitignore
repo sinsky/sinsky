@@ -23,6 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local Netlify folder
-.netlify
+# Local env / worker secrets
 .env
+worker/.dev.vars
+
+# Generated worker types (regenerated via `aube run types`)
+worker/worker-configuration.d.ts
+
+# Cloudflare Wrangler local state
+.wrangler
+
+.cate

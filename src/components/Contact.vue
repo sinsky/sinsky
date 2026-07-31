@@ -1,150 +1,145 @@
 <script setup lang="ts">
-defineProps<{ bgColor: string }>();
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { toast } from "vue-sonner";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
+import { toast } from "vue-sonner";
+
+import Reveal from "@/components/Reveal.vue";
+import FieldText from "@/components/form/FieldText.vue";
+import FieldArea from "@/components/form/FieldArea.vue";
+import FormButton from "@/components/form/FormButton.vue";
+
+defineProps<{ bgColor: string }>();
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
+const contactApiUrl = "/api/contact";
 
 const formSchema = toTypedSchema(
   z.object({
     "bot-field": z.string().default(""),
-    "form-name": z.string().default("Contact"),
-    name: z.string().min(1, { message: "お名前を入力してください" }).max(50),
-    email: z.string().email("有効なメールアドレスを入力してください"),
-    description: z
+    name: z.string().min(1, { message: "お名前を入力してください" }).max(50),
+    email: z.string().email("有効なメールアドレスを入力してください"),
+    message: z
       .string()
-      .min(10, { message: "内容は最低10文字以上入力してください" }),
+      .min(10, { message: "内容は最低10文字以上入力してください" })
+      .max(5000, { message: "内容は5000文字以内で入力してください" }),
   }),
 );
 
-const form = useForm({
+const { handleSubmit, isSubmitting, resetForm, setFieldValue } = useForm({
   validationSchema: formSchema,
+  initialValues: {
+    "bot-field": "",
+    name: "",
+    email: "",
+    message: "",
+  },
 });
 
-const { isSubmitting } = form;
-
-const onSubmit = form.handleSubmit((values) => {
+const onSubmit = handleSubmit(async (values) => {
   try {
-    const formData = new URLSearchParams(
-      values as Record<string, string>,
-    ).toString();
-    console.log(formData);
-    fetch("/", {
+    const response = await fetch(contactApiUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData,
-    }).then((res) => {
-      if (res.status === 200) {
-        toast.success("送信完了", {
-          description: "確認後、返答いたします。",
-        });
-        form.resetForm();
-      } else {
-        toast.error("送信エラー", {
-          description: "お手数ですが、再度送信してください。",
-        });
-      }
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        "bot-field": values["bot-field"],
+        name: values.name,
+        email: values.email,
+        message: values.message,
+      }),
     });
+
+    if (response.ok) {
+      toast.success("送信完了", { description: "確認後、返答いたします。" });
+      resetForm();
+    } else {
+      toast.error("送信エラー", {
+        description: "お手数ですが、再度送信してください。",
+      });
+    }
   } catch (error) {
     console.error("フォーム送信エラー:", error);
     toast.error("送信エラー", {
-      description: "お手数ですが、再度送信してください。",
+      description: "お手数ですが、再度送信してください。",
     });
   }
 });
+
+function onBotField(event: Event) {
+  setFieldValue("bot-field", (event.target as HTMLInputElement).value);
+}
 </script>
 
 <template>
-  <section class="relative z-30 py-16" :class="bgColor">
-    <h2 class="text-center">Contact</h2>
-    <div class="container max-w-lg mx-auto">
-      <form
-        @submit="onSubmit"
-        class="[&>*:not(:last-child)]:mb-8"
-        netlify
-        netlify-honeypot="bot-field"
-        name="Contact"
+  <section
+    id="contact"
+    class="relative flex min-h-svh flex-col items-center gap-10 px-6 py-24"
+    :class="bgColor"
+  >
+    <h2 class="text-center text-slate-800">Contact</h2>
+    <p class="max-w-md text-center text-sm text-slate-600">
+      お気軽にご連絡ください。
+      <span v-if="contactEmail">
+        フォームが使えないときは
+        <a
+          :href="`mailto:${contactEmail}`"
+          class="font-medium text-violet-600 underline"
+          >{{ contactEmail }}</a
+        >
+        まで。
+      </span>
+    </p>
+
+    <Reveal class="w-full max-w-xl" :delay="100">
+      <div
+        class="bubble-shape w-full bg-white/85 p-8 shadow-sm backdrop-blur-sm md:p-12"
+        style="--bubble-duration: 16s"
       >
-        <FormField v-slot="{ componentField }" name="form-name">
-          <Input type="hidden" v-bind="componentField" value="Contact" />
-        </FormField>
-        <div hidden>
-          <FormField v-slot="{ componentField }" name="bot-field">
-            <FormLabel>bot-field</FormLabel>
-            <Input type="hidden" v-bind="componentField" />
-            <FormDescription
-              >あなたが人間なら、これを記入しないでください</FormDescription
-            >
-          </FormField>
-        </div>
-        <FormField v-slot="{ componentField }" name="name">
-          <FormItem>
-            <FormLabel>お名前</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                placeholder="sinsky"
-                v-bind="componentField"
-                class="border-slate-700"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
+        <form @submit="onSubmit" class="flex flex-col gap-5" novalidate>
+          <div hidden aria-hidden="true">
+            <label for="bot-field">bot-field</label>
+            <input
+              id="bot-field"
+              name="bot-field"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+              @input="onBotField"
+            />
+          </div>
 
-        <FormField v-slot="{ componentField }" name="email">
-          <FormItem>
-            <FormLabel>メールアドレス</FormLabel>
-            <FormControl>
-              <Input
-                type="email"
-                :placeholder="contactEmail"
-                v-bind="componentField"
-                class="border-slate-700"
-              />
-            </FormControl>
-            <FormDescription>連絡先を入力してください</FormDescription>
-            <FormMessage />
-          </FormItem>
-        </FormField>
+          <FieldText
+            name="name"
+            label="お名前"
+            placeholder="sinsky"
+            autocomplete="name"
+            required
+          />
 
-        <FormField v-slot="{ componentField }" name="description">
-          <FormItem>
-            <FormLabel>内容</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder="shadcn"
-                v-bind="componentField"
-                rows="4"
-                class="border-slate-700"
-              />
-            </FormControl>
-            <FormDescription>
-              お問い合わせ内容を入力してください
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-        <div class="flex justify-end">
-          <Button type="submit" :disabled="isSubmitting">
-            <span v-if="isSubmitting">送信中...</span>
-            <span v-else>送信</span>
-          </Button>
-        </div>
-      </form>
-    </div>
+          <FieldText
+            name="email"
+            label="メールアドレス"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          />
+
+          <FieldArea
+            name="message"
+            label="内容"
+            placeholder="お問い合わせ内容を入力してください"
+            :rows="6"
+            required
+          />
+
+          <div class="mt-2 flex justify-end">
+            <FormButton :loading="isSubmitting">
+              <span>{{ isSubmitting ? "送信中..." : "送信" }}</span>
+            </FormButton>
+          </div>
+        </form>
+      </div>
+    </Reveal>
   </section>
 </template>
