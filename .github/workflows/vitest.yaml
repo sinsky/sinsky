@@ -1,4 +1,4 @@
-name: Vitest CI
+name: CI
 
 on:
   push:
@@ -9,10 +9,15 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
-    name: Run Vitest
+  check:
+    name: Format, Build, and Test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -29,8 +34,8 @@ jobs:
       - name: Check formatting
         run: pnpm run fmt:check
 
-      - name: Run Build
+      - name: Build
         run: pnpm run build
 
-      - name: Run vitest
+      - name: Test
         run: pnpm run test
