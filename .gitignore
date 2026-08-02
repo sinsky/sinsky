@@ -27,8 +27,11 @@ dist-ssr
 .env
 worker/.dev.vars
 
-# Generated worker types (regenerated via `aube run types`)
+# Generated worker types (regenerated via `pnpm run types`)
 worker/worker-configuration.d.ts
+
+# Stray copy of the frontend's generated vue-router types; worker does not use vue-router
+worker/typed-router.d.ts
 
 # Cloudflare Wrangler local state
 .wrangler
