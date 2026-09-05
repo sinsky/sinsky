@@ -7,7 +7,7 @@
     "types": [
       "./worker-configuration.d.ts",
       "./src/worker.d.ts",
-      "@cloudflare/vitest-pool-workers"
+      "@cloudflare/vitest-pool-workers/types"
     ],
     "strict": true,
     "noEmit": true,
