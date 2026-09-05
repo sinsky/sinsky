@@ -5,6 +5,11 @@ declare global {
   interface Env {
     SLACK_WEBHOOK_URL: string;
   }
+  namespace Cloudflare {
+    interface Env {
+      SLACK_WEBHOOK_URL: string;
+    }
+  }
 }
 
 export {};
