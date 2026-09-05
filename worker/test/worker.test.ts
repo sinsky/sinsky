@@ -1,9 +1,14 @@
-import { env, fetchMock } from "cloudflare:test";
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { setupNetwork } from "@msw/cloudflare";
+import { env } from "cloudflare:test";
+import { http, HttpResponse } from "msw";
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import worker from "../src/worker";
 
 const SLACK_ORIGIN = "https://hooks.slack.com";
 const SLACK_PATH = "/services/T0000000/B0000000/XXXXXXXXXXXXXXXXXXXXXXXX";
+const SLACK_URL = `${SLACK_ORIGIN}${SLACK_PATH}`;
+
+const network = setupNetwork();
 
 const validPayload = {
   name: "sinsky",
@@ -28,13 +33,12 @@ function formRequest(): Request {
 }
 
 function mockSlack(status: number, captureBody?: (body: string) => void): void {
-  fetchMock
-    .get(SLACK_ORIGIN)
-    .intercept({ method: "POST", path: SLACK_PATH })
-    .reply(status, (options) => {
-      captureBody?.(String(options.body));
-      return "ok";
-    });
+  network.use(
+    http.post(SLACK_URL, async ({ request }) => {
+      captureBody?.(await request.text());
+      return new HttpResponse("ok", { status });
+    }),
+  );
 }
 
 function dispatch(request: Request, handlerEnv: Env = env): Promise<Response> {
@@ -42,12 +46,15 @@ function dispatch(request: Request, handlerEnv: Env = env): Promise<Response> {
 }
 
 beforeAll(() => {
-  fetchMock.activate();
-  fetchMock.disableNetConnect();
+  network.enable();
 });
 
 afterEach(() => {
-  fetchMock.assertNoPendingInterceptors();
+  network.resetHandlers();
+});
+
+afterAll(() => {
+  network.disable();
 });
 
 describe("routing", () => {
