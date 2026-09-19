@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { useSeoMeta } from "@unhead/vue";
+import { useHead, useSeoMeta } from "@unhead/vue";
+
+useHead({
+  htmlAttrs: {
+    lang: "ja",
+  },
+});
 
 useSeoMeta({
   charset: "utf-8",
