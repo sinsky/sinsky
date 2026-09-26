@@ -30,7 +30,7 @@
   "devDependencies": {
     "@iconify/json": "^2.2.528",
     "@types/node": "^26.6.1",
-    "@vitejs/plugin-vue": "^5.2.3",
+    "@vitejs/plugin-vue": "^6.0.9",
     "@vue/test-utils": "^2.5.0",
     "@vue/tsconfig": "^0.9.1",
     "happy-dom": "^20.14.5",
