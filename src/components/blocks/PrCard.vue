@@ -7,7 +7,7 @@ defineProps<{ title: string; url: string; comment: string }>();
     :href="url"
     target="_blank"
     rel="noopener noreferrer"
-    class="bubble-shape group flex h-full flex-col gap-3 rounded-2xl bg-white/80 p-6 text-slate-800 shadow-sm ring-1 ring-violet-200/60 transition-transform duration-500 hover:-translate-y-1 hover:shadow-md hover:ring-violet-300"
+    class="bubble-shape group flex h-full flex-col gap-3 rounded-2xl border border-violet-200/60 bg-white/80 p-6 text-slate-800 shadow-sm transition duration-500 hover:-translate-y-1 hover:border-violet-300 hover:shadow-md"
   >
     <div class="flex items-center justify-between gap-3">
       <h4 class="my-0 text-base font-semibold">{{ title }}</h4>
