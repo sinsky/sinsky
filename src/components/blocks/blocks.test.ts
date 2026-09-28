@@ -63,4 +63,13 @@ describe("PrCard.vue", () => {
     });
     expect(wrapper.classes()).toContain("bubble-shape");
   });
+
+  it("paints its edge with a real border instead of a box-shadow ring", () => {
+    const wrapper = mount(PrCard, {
+      props: { title: "x", url: "https://x", comment: "y" },
+    });
+    const classes = wrapper.classes();
+    expect(classes).toContain("border");
+    expect(classes.some((name) => name.includes("ring"))).toBe(false);
+  });
 });
