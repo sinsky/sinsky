@@ -13,9 +13,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@lucide/vue": "^1.47.0",
+    "@lucide/vue": "^1.52.0",
     "@tailwindcss/vite": "^4.1.5",
-    "@unhead/vue": "^3.4.1",
+    "@unhead/vue": "^3.4.2",
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^15.0.0",
     "clsx": "^2.1.1",
@@ -28,15 +28,15 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.532",
-    "@types/node": "^26.6.2",
+    "@iconify/json": "^2.2.539",
+    "@types/node": "^26.6.4",
     "@vitejs/plugin-vue": "^6.0.9",
     "@vue/test-utils": "^2.5.1",
     "@vue/tsconfig": "^0.9.1",
     "happy-dom": "^20.14.5",
     "husky": "^9.1.7",
-    "lint-staged": "^17.5.1",
-    "oxfmt": "^0.70.0",
+    "lint-staged": "^17.6.0",
+    "oxfmt": "^0.72.0",
     "tailwindcss": "^4.1.5",
     "typescript": "^6.0.3",
     "unplugin-icons": "^24.0.0",
@@ -45,7 +45,7 @@
     "vite-ssg": "^28.3.0",
     "vitest": "^4.1.11",
     "vue-router": "^4.5.1",
-    "vue-tsc": "^3.3.11"
+    "vue-tsc": "^3.3.12"
   },
   "lint-staged": {
     "*.{js,ts,vue}": [
