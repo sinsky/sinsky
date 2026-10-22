@@ -54,5 +54,6 @@
     "*.{json,css,scss,md,html}": [
       "oxfmt"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.33.4"
 }
