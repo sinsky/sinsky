@@ -7,7 +7,7 @@ export default mergeConfig(
     test: {
       globals: true,
       environment: "happy-dom",
-      exclude: [...configDefaults.exclude, "worker/**"],
+      exclude: [...configDefaults.exclude],
     },
   }),
 );

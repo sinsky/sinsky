@@ -50,11 +50,13 @@ specが暗黙に要求し、かつタスク内テストが直接担保しない�
 ### Task 1: 依存関係・ツールチェーンの更新
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `.nvmrc`
 - Modify: `pnpm-workspace.yaml`
 
 **Interfaces:**
+
 - Consumes: なし
 - Produces: インストール済みの `void` CLI（後続タスクが `pnpm exec void` で使用）、vite 8 で動く `vite.config.ts` の土台
 
@@ -94,6 +96,7 @@ git commit -m "chore: migrate toolchain to void (vite 8, vitest 5, zod 4)"
 ### Task 2: Void設定の骨格
 
 **Files:**
+
 - Create: `void.config.ts`
 - Create: `env.ts`
 - Modify: `vite.config.ts`（全面書き換え）
@@ -101,6 +104,7 @@ git commit -m "chore: migrate toolchain to void (vite 8, vitest 5, zod 4)"
 - Modify: `src/vite-env.d.ts`
 
 **Interfaces:**
+
 - Consumes: `void`, `@void/vue`（Task 1）
 - Produces: `voidPlugin()` 入りの `vite.config.ts`（Task 3/4 のvitest実行が依存）、`env.SLACK_WEBHOOK_URL` / `env.VITE_CONTACT_EMAIL`（`import { env } from "void/env"`。Task 5 が使用）
 
@@ -181,10 +185,12 @@ git commit -m "feat: add void config, env schema, and vite 8 plugin stack"
 ### Task 3: 共有スキーマ contactSchema（TDD）
 
 **Files:**
+
 - Create: `src/lib/contactSchema.ts`
 - Test: `tests/contactSchema.test.ts`
 
 **Interfaces:**
+
 - Consumes: zod ^4（Task 1）
 - Produces: `contactSchema`（zodスキーマ）と `ContactFormValues`（z.infer型: `{ "bot-field": string; name: string; email: string; message: string }`）。Task 4/5 が使用
 
@@ -196,7 +202,12 @@ git commit -m "feat: add void config, env schema, and vite 8 plugin stack"
 import { contactSchema } from "@/lib/contactSchema";
 import { describe, expect, it } from "vitest";
 
-const valid = { "bot-field": "", name: "sinsky", email: "sin@example.com", message: "Hello, this is a contact form test." };
+const valid = {
+  "bot-field": "",
+  name: "sinsky",
+  email: "sin@example.com",
+  message: "Hello, this is a contact form test.",
+};
 
 describe("contactSchema", () => {
   it("accepts a valid payload", () => {
@@ -212,36 +223,49 @@ describe("contactSchema", () => {
     const r = contactSchema.safeParse({ ...valid, name: "   " });
     expect(r.success).toBe(false);
     if (!r.success) {
-      expect(r.error.issues.find((i) => i.path[0] === "name")?.message).toBe("お名前を入力してください");
+      expect(r.error.issues.find((i) => i.path[0] === "name")?.message).toBe(
+        "お名前を入力してください",
+      );
     }
   });
 
   it("rejects a 101-character name", () => {
-    expect(contactSchema.safeParse({ ...valid, name: "a".repeat(101) }).success).toBe(false);
+    expect(
+      contactSchema.safeParse({ ...valid, name: "a".repeat(101) }).success,
+    ).toBe(false);
   });
 
   it("rejects an invalid email with the Japanese message", () => {
     const r = contactSchema.safeParse({ ...valid, email: "not-an-email" });
     expect(r.success).toBe(false);
     if (!r.success) {
-      expect(r.error.issues.find((i) => i.path[0] === "email")?.message).toBe("有効なメールアドレスを入力してください");
+      expect(r.error.issues.find((i) => i.path[0] === "email")?.message).toBe(
+        "有効なメールアドレスを入力してください",
+      );
     }
   });
 
   it("rejects an email longer than 254 characters", () => {
-    expect(contactSchema.safeParse({ ...valid, email: `${"a".repeat(250)}@x.com` }).success).toBe(false);
+    expect(
+      contactSchema.safeParse({ ...valid, email: `${"a".repeat(250)}@x.com` })
+        .success,
+    ).toBe(false);
   });
 
   it("rejects a short message with the Japanese message", () => {
     const r = contactSchema.safeParse({ ...valid, message: "short" });
     expect(r.success).toBe(false);
     if (!r.success) {
-      expect(r.error.issues.find((i) => i.path[0] === "message")?.message).toBe("内容は最低10文字以上入力してください");
+      expect(r.error.issues.find((i) => i.path[0] === "message")?.message).toBe(
+        "内容は最低10文字以上入力してください",
+      );
     }
   });
 
   it("rejects a 5001-character message", () => {
-    expect(contactSchema.safeParse({ ...valid, message: "あ".repeat(5001) }).success).toBe(false);
+    expect(
+      contactSchema.safeParse({ ...valid, message: "あ".repeat(5001) }).success,
+    ).toBe(false);
   });
 });
 ```
@@ -293,11 +317,13 @@ git commit -m "feat: add shared contact form schema"
 ### Task 4: 通知コア contactSubmit（TDD・workerテストの移植）
 
 **Files:**
+
 - Create: `src/lib/contactSubmit.ts`
 - Test: `tests/contactSubmit.test.ts`
 - 参照（移植元・読み取り専用）: `worker/src/worker.ts`、`worker/test/worker.test.ts`
 
 **Interfaces:**
+
 - Consumes: `ContactFormValues`（Task 3）
 - Produces: `submitContact(values: ContactFormValues, webhookUrl: string | undefined): Promise<SubmitResult>`。`SubmitResult = { ok: true } | { ok: false; status: 422 | 500 | 502; message: string }`。Task 5 の action が使用。フレームワーク非依存（fetch と env 値のみ使用）のため、テストはmswのモックfetchに対して直接実行できる
 
@@ -312,8 +338,14 @@ import { http, HttpResponse } from "msw";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { submitContact } from "@/lib/contactSubmit";
 
-const SLACK_URL = "https://hooks.slack.com/services/T0000000/B0000000/XXXXXXXXXXXXXXXXXXXXXXXX";
-const valid = { "bot-field": "", name: "sinsky", email: "sin@example.com", message: "Hello, this is a contact form test." };
+const SLACK_URL =
+  "https://hooks.slack.com/services/T0000000/B0000000/XXXXXXXXXXXXXXXXXXXXXXXX";
+const valid = {
+  "bot-field": "",
+  name: "sinsky",
+  email: "sin@example.com",
+  message: "Hello, this is a contact form test.",
+};
 
 const server = setupServer();
 beforeAll(() => server.listen());
@@ -362,6 +394,7 @@ git commit -m "feat: port contact notification core from worker"
 ### Task 5: pages/UI 切り替え（cutover）
 
 **Files:**
+
 - Create: `pages/layout.vue`
 - Create: `pages/index.vue`
 - Create: `pages/index.server.ts`
@@ -373,6 +406,7 @@ git commit -m "feat: port contact notification core from worker"
 - Delete: `src/App.vue`、`src/main.ts`、`src/pages/index.vue`、`typed-router.d.ts`、`index.html`
 
 **Interfaces:**
+
 - Consumes: `contactSchema`・`ContactFormValues`（Task 3）、`submitContact`・`SubmitResult`（Task 4）、`env`（Task 2）、`useForm`・`Form` は `@void/vue`
 - Produces: 動作するVoidアプリ（`pnpm build`・`pnpm dev`・`pnpm test` が緑の状態）
 
@@ -409,7 +443,10 @@ export const head = defineHead(() => ({
   titleTemplate: "",
   meta: [
     { name: "description", content: "sinskyのプロフィールページへようこそ！" },
-    { property: "og:description", content: "sinskyのプロフィールページへようこそ！" },
+    {
+      property: "og:description",
+      content: "sinskyのプロフィールページへようこそ！",
+    },
     { property: "og:image", content: "https://github.com/sinsky.png" },
     { property: "og:site_name", content: "sinsky.me" },
     { property: "og:type", content: "website" },
@@ -441,13 +478,20 @@ export const action = defineHandler.withValidator({ body: contactSchema })(
 `<script setup>` は `useForm`（`@void/vue`）+ 共有スキーマ事前検証とする:
 
 ```ts
-const form = useForm("/", { "bot-field": "", name: "", email: "", message: "" }, { resetOnSuccess: true });
+const form = useForm(
+  "/",
+  { "bot-field": "", name: "", email: "", message: "" },
+  { resetOnSuccess: true },
+);
 
 async function onSubmit() {
   const parsed = contactSchema.safeParse(form.data);
   if (!parsed.success) {
     for (const issue of parsed.error.issues) {
-      form.setError(issue.path[0] as "bot-field" | "name" | "email" | "message", issue.message);
+      form.setError(
+        issue.path[0] as "bot-field" | "name" | "email" | "message",
+        issue.message,
+      );
     }
     return;
   }
@@ -457,7 +501,9 @@ async function onSubmit() {
       toast.success("送信完了", { description: "確認後、返答いたします。" });
     }
   } catch {
-    toast.error("送信エラー", { description: "お手数ですが、再度送信してください。" });
+    toast.error("送信エラー", {
+      description: "お手数ですが、再度送信してください。",
+    });
   }
 }
 ```
@@ -504,6 +550,7 @@ Expected: すべての要素が1以上ヒット（欠落したmetaがあればSt
 
 Run: バックグラウンドで `mise exec -- pnpm dev`
 Expected:
+
 1. `http://localhost:5173` で Hero/Profile/Skills/Contact/SectionNav が現行どおり表示される
 2. フォームを空のまま「送信」→ 3フィールドに日本語インラインエラー（文言は Global Constraints どおり）、ネットワーク送信は発生しない
 3. 「送信」ボタン押下中は disabled+スピナー（`form.pending`）
@@ -524,6 +571,7 @@ git commit -m "feat: cut over frontend to void pages mode"
 ### Task 6: 旧構成の削除・CI/環境整理
 
 **Files:**
+
 - Delete: `worker/`（ディレクトリ全体）、`wrangler.jsonc`、`.wrangler/`（gitignore済み・ファイルシステム削除）
 - Modify: `.gitignore`
 - Modify: `.env.example`
@@ -531,6 +579,7 @@ git commit -m "feat: cut over frontend to void pages mode"
 - Modify: `vitest.config.ts`
 
 **Interfaces:**
+
 - Consumes: なし（Task 5完了後の緑状態を維持する整理タスク）
 - Produces: 単一パッケージ構成のrepo（package.json 1つ・CI緑）
 
@@ -560,14 +609,14 @@ SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXX/YYY/ZZZ
 worker 用3ステップ（`Generate worker types` / `Worker typecheck` / `Worker test`）を削除し、`Build` ステップの前に `void prepare`（型生成）ステップを追加する:
 
 ```yaml
-      - name: Generate void types
-        run: pnpm run types
+- name: Generate void types
+  run: pnpm run types
 
-      - name: Build
-        run: pnpm run build
+- name: Build
+  run: pnpm run build
 
-      - name: Test
-        run: pnpm run test
+- name: Test
+  run: pnpm run test
 ```
 
 （`fmt:check`・mise・`pnpm install --frozen-lockfile` はそのまま）

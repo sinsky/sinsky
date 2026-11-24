@@ -42,6 +42,7 @@ sinsky.me の現行構成は「Vite + vite-ssg（フロント、ルートpackage
 3. **vite-ssgを「静的サイト+バックエンド」として残す** — 同一vite.configでビルドパイプラインが衝突する恐れ。不採用
 
 フォームのバックエンドは2案を比較した:
+
 - **routes/api/contact.ts + 既存fetch** — UI変更ゼロだが、クライアント（vee-validate+zod）とサーバー（手書き検証）で検証ロジックが二重管理のまま
 - **index.server.ts の action + `useForm`**（採用）— zodスキーマ1本をサーバー（`withValidator`）とクライアント（事前検証・型推論）で共有でき、vee-validate / @vee-validate/zod を依存から外せる。プログレッシブ・エンハンスメントも標準で付く。依頼者の「向いている方向に実装を変更して構いません」に基づきこちらへ
 
@@ -53,32 +54,32 @@ sinsky.me の現行構成は「Vite + vite-ssg（フロント、ルートpackage
 
 **新規作成**
 
-| ファイル | 内容 |
-|---|---|
-| `pages/index.vue` | `src/pages/index.vue` を移動。`useHead`/`useSeoMeta` を削除し、コンポーネント構成（Hero/Profile/Skills/Contact/SectionNav）はそのまま |
-| `pages/index.server.ts` | `head()`（defineHead）+ `action`（defineHandler.withValidator + 薄いグルー）。失敗は `c.text(message, status)` で返す |
-| `src/lib/contactSubmit.ts` | 通知コアの純関数（honeypot判定・Slack blocks生成・エスケープ・webhook送信・結果判定）。`worker/src/worker.ts` から移植し、actionから呼ぶ。コンテキスト非依存のためテスト容易 |
-| `pages/layout.vue` | `App.vue` 相当: `<Toaster richColors closeButton />` + 子ページ描画。グローバルCSS（`src/assets/index.css`）の import はここで |
-| `src/lib/contactSchema.ts` | 共有 zod スキーマ（zod ^4）。現行 Contact.vue の z.object（日本語エラー文言・最大長・honeypot `bot-field`）を1本化 |
-| `void.config.ts` | `output: "static"`、`head`（htmlAttrs `lang: "ja"`、charset、viewport、favicon link）、`routing.typedRoutes: true` |
-| `env.ts` | `SLACK_WEBHOOK_URL` をサーバー専用シークレットとして宣言 |
-| `tests/contact-action.test.ts` | 後述「テスト」参照 |
+| ファイル                       | 内容                                                                                                                                                                         |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pages/index.vue`              | `src/pages/index.vue` を移動。`useHead`/`useSeoMeta` を削除し、コンポーネント構成（Hero/Profile/Skills/Contact/SectionNav）はそのまま                                        |
+| `pages/index.server.ts`        | `head()`（defineHead）+ `action`（defineHandler.withValidator + 薄いグルー）。失敗は `c.text(message, status)` で返す                                                        |
+| `src/lib/contactSubmit.ts`     | 通知コアの純関数（honeypot判定・Slack blocks生成・エスケープ・webhook送信・結果判定）。`worker/src/worker.ts` から移植し、actionから呼ぶ。コンテキスト非依存のためテスト容易 |
+| `pages/layout.vue`             | `App.vue` 相当: `<Toaster richColors closeButton />` + 子ページ描画。グローバルCSS（`src/assets/index.css`）の import はここで                                               |
+| `src/lib/contactSchema.ts`     | 共有 zod スキーマ（zod ^4）。現行 Contact.vue の z.object（日本語エラー文言・最大長・honeypot `bot-field`）を1本化                                                           |
+| `void.config.ts`               | `output: "static"`、`head`（htmlAttrs `lang: "ja"`、charset、viewport、favicon link）、`routing.typedRoutes: true`                                                           |
+| `env.ts`                       | `SLACK_WEBHOOK_URL` をサーバー専用シークレットとして宣言                                                                                                                     |
+| `tests/contact-action.test.ts` | 後述「テスト」参照                                                                                                                                                           |
 
 **変更**
 
-| ファイル | 変更内容 |
-|---|---|
-| `vite.config.ts` | `voidPlugin()` + `voidVue()` を追加。`VueRouter()`/`vue()` を削除。`vueDevTools()`/`Icons()`/`tailwindcss()` は維持 |
-| `package.json` | scripts: `build: "vue-tsc -b && vite build"`、`types: "void prepare"`、`deploy: "void deploy"`。devDeps: +`void`, +`@void/vue`、vite ^6→**^8.3.8**、vitest ^4→**^5**、zod ^3.24.3→**^4**、−`vite-ssg`, −`unplugin-vue-router`, −`vue-router`, −`@unhead/vue`, −`vee-validate`, −`@vee-validate/zod`, −`@cloudflare/vitest-pool-workers`, −`@msw/cloudflare`（`msw` 本体は残す） |
-| `src/components/Contact.vue` | vee-validate の `useForm` → Void の `useForm` + `<Form :form="form">`。送信は `await form.post()` の結果（`wasSuccessful` / throw）で toast 分岐、成功時 `resetOnSuccess` でクリア。送信前・blur時に共有スキーマで `setError` し、即時インラインエラーを維持。honeypot は `form.data["bot-field"]` に bind。テンプレート構造・文言・クラスは不改変 |
-| `src/components/form/FieldText.vue` / `FieldArea.vue` | `useField`（vee-validate）を削除し、制御された表示コンポーネント化（`modelValue` + `error` props + emit）。`FormLabel`/`FormInput`/`FormTextarea`/`FormHint`/`FormError` の a11y 構成（describedBy・aria）と見た目はそのまま |
-| `pnpm-workspace.yaml` | `packages: [worker]` を削除。`allowBuilds` を void の要件に合わせ調整（セキュリティ overrides は維持） |
-| `.nvmrc` | `22` → `26` |
-| `.env.example` | `VITE_CONTACT_EMAIL` と `SLACK_WEBHOOK_URL` をルート1ファイルに一本化（コメントは `void secret set` を案内） |
-| `.github/workflows/vitest.yaml` | worker 用3ステップ（types/typecheck/test）を削除し、ルートの build/test に統合 |
-| `tsconfig.json` | `.void/tsconfig.json` を extends（`void init --tsconfig`） |
-| `.gitignore` | `.void/` を追加 |
-| `src/vite-env.d.ts` | `unplugin-vue-router/client` 参照を削除 |
+| ファイル                                              | 変更内容                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vite.config.ts`                                      | `voidPlugin()` + `voidVue()` を追加。`VueRouter()`/`vue()` を削除。`vueDevTools()`/`Icons()`/`tailwindcss()` は維持                                                                                                                                                                                                                                                             |
+| `package.json`                                        | scripts: `build: "vue-tsc -b && vite build"`、`types: "void prepare"`、`deploy: "void deploy"`。devDeps: +`void`, +`@void/vue`、vite ^6→**^8.3.8**、vitest ^4→**^5**、zod ^3.24.3→**^4**、−`vite-ssg`, −`unplugin-vue-router`, −`vue-router`, −`@unhead/vue`, −`vee-validate`, −`@vee-validate/zod`, −`@cloudflare/vitest-pool-workers`, −`@msw/cloudflare`（`msw` 本体は残す） |
+| `src/components/Contact.vue`                          | vee-validate の `useForm` → Void の `useForm` + `<Form :form="form">`。送信は `await form.post()` の結果（`wasSuccessful` / throw）で toast 分岐、成功時 `resetOnSuccess` でクリア。送信前・blur時に共有スキーマで `setError` し、即時インラインエラーを維持。honeypot は `form.data["bot-field"]` に bind。テンプレート構造・文言・クラスは不改変                              |
+| `src/components/form/FieldText.vue` / `FieldArea.vue` | `useField`（vee-validate）を削除し、制御された表示コンポーネント化（`modelValue` + `error` props + emit）。`FormLabel`/`FormInput`/`FormTextarea`/`FormHint`/`FormError` の a11y 構成（describedBy・aria）と見た目はそのまま                                                                                                                                                    |
+| `pnpm-workspace.yaml`                                 | `packages: [worker]` を削除。`allowBuilds` を void の要件に合わせ調整（セキュリティ overrides は維持）                                                                                                                                                                                                                                                                          |
+| `.nvmrc`                                              | `22` → `26`                                                                                                                                                                                                                                                                                                                                                                     |
+| `.env.example`                                        | `VITE_CONTACT_EMAIL` と `SLACK_WEBHOOK_URL` をルート1ファイルに一本化（コメントは `void secret set` を案内）                                                                                                                                                                                                                                                                    |
+| `.github/workflows/vitest.yaml`                       | worker 用3ステップ（types/typecheck/test）を削除し、ルートの build/test に統合                                                                                                                                                                                                                                                                                                  |
+| `tsconfig.json`                                       | `.void/tsconfig.json` を extends（`void init --tsconfig`）                                                                                                                                                                                                                                                                                                                      |
+| `.gitignore`                                          | `.void/` を追加                                                                                                                                                                                                                                                                                                                                                                 |
+| `src/vite-env.d.ts`                                   | `unplugin-vue-router/client` 参照を削除                                                                                                                                                                                                                                                                                                                                         |
 
 **削除**: `worker/` ディレクトリ全体、`wrangler.jsonc`、`src/App.vue`、`src/main.ts`、`src/pages/index.vue`、`typed-router.d.ts`、`index.html`（Void がシェルを生成する場合。void init の出力で最終判断）
 
@@ -86,10 +87,10 @@ sinsky.me の現行構成は「Vite + vite-ssg（フロント、ルートpackage
 
 ### head / meta の移行対応
 
-| 現在 | 移行先 |
-|---|---|
-| `useHead` の `htmlAttrs: { lang: "ja" }` | `void.config.ts` → `head.htmlAttrs` |
-| `index.html` の charset / viewport / favicon | `void.config.ts` → `head.meta` + `head.link` |
+| 現在                                                | 移行先                                                     |
+| --------------------------------------------------- | ---------------------------------------------------------- |
+| `useHead` の `htmlAttrs: { lang: "ja" }`            | `void.config.ts` → `head.htmlAttrs`                        |
+| `index.html` の charset / viewport / favicon        | `void.config.ts` → `head.meta` + `head.link`               |
 | `useSeoMeta`（title, description, og*, themeColor） | `pages/index.server.ts` の `head()`（`titleTemplate: ""`） |
 
 `og:image`（`https://github.com/sinsky.png`）と `og:url` は既に絶対URLのため、prerender でも正しく出力される（Void SSGドキュメントの指示どおり）。
