@@ -1,10 +1,11 @@
-packages:
-  - worker
 allowBuilds:
   esbuild: true
   sharp: true
   vue-demi: true
   workerd: true
+  # void bundles its own better-sqlite3 binaries; skip the native build
+  # (pnpm will still list it under "Ignored build scripts" as informational output)
+  better-sqlite3: false
 overrides:
   wrangler: ^4.118.0
   ws: ^8.21.1
