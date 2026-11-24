@@ -20,6 +20,7 @@
     "src/**/*.vue",
     "pages/**/*.ts",
     "pages/**/*.vue",
+    "routes/**/*.ts",
     "env.ts",
     ".void/**/*.d.ts"
   ]

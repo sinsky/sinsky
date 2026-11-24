@@ -1,7 +1,4 @@
-import { defineHandler, defineHead } from "void";
-import { env } from "void/env";
-import { contactSchema } from "@/lib/contactSchema";
-import { submitContact } from "@/lib/contactSubmit";
+import { defineHead } from "void";
 
 export const head = defineHead(() => ({
   title: "sinsky.me",
@@ -22,12 +19,3 @@ export const head = defineHead(() => ({
     { property: "og:locale", content: "ja" },
   ],
 }));
-
-export const action = defineHandler.withValidator({ body: contactSchema })(
-  async (c, { body }) => {
-    const result = await submitContact(body, env.SLACK_WEBHOOK_URL);
-    if (!result.ok) {
-      return c.text(result.message, result.status);
-    }
-  },
-);

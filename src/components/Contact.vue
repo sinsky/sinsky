@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useForm } from "@void/vue";
+import { reactive, ref } from "vue";
 
 import Reveal from "@/components/Reveal.vue";
 import FieldText from "@/components/form/FieldText.vue";
@@ -8,46 +7,66 @@ import FieldArea from "@/components/form/FieldArea.vue";
 import FormButton from "@/components/form/FormButton.vue";
 import ContactResultModal from "@/components/ContactResultModal.vue";
 import { contactSchema, fieldError } from "@/lib/contactSchema";
+import type { ContactField } from "@/lib/contactSchema";
 
 defineProps<{ bgColor: string }>();
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
+const contactApiUrl = "/api/contact";
 
-const form = useForm(
-  "/",
-  { "bot-field": "", name: "", email: "", message: "" },
-  { resetOnSuccess: true },
+const fields = reactive({
+  "bot-field": "",
+  name: "",
+  email: "",
+  message: "",
+});
+
+const errors = reactive<{ name?: string; email?: string; message?: string }>(
+  {},
 );
 
+const pending = ref(false);
 const result = ref<"success" | "error" | null>(null);
 
 async function onSubmit() {
-  const parsed = contactSchema.safeParse(form.data);
+  const parsed = contactSchema.safeParse(fields);
   if (!parsed.success) {
     for (const issue of parsed.error.issues) {
-      form.setError(
-        issue.path[0] as "bot-field" | "name" | "email" | "message",
-        issue.message,
-      );
+      const field = issue.path[0] as ContactField | "bot-field";
+      if (field !== "bot-field") {
+        errors[field] = issue.message;
+      }
     }
     return;
   }
+  pending.value = true;
   try {
-    await form.post();
-    if (form.wasSuccessful) {
+    const response = await fetch(contactApiUrl, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(parsed.data),
+    });
+    if (response.ok) {
       result.value = "success";
-    } else if (form.error) {
+      fields.name = "";
+      fields.email = "";
+      fields.message = "";
+      fields["bot-field"] = "";
+    } else {
       result.value = "error";
     }
-  } catch {
+  } catch (error) {
+    console.error("フォーム送信エラー:", error);
     result.value = "error";
+  } finally {
+    pending.value = false;
   }
 }
 
-function onFieldBlur(field: "name" | "email" | "message") {
-  const error = fieldError(field, form.data[field]);
+function onFieldBlur(field: ContactField) {
+  const error = fieldError(field, fields[field]);
   if (error) {
-    form.setError(field, error);
+    errors[field] = error;
   }
 }
 </script>
@@ -82,7 +101,7 @@ function onFieldBlur(field: "name" | "email" | "message") {
             <label for="bot-field">bot-field</label>
             <input
               id="bot-field"
-              v-model="form.data['bot-field']"
+              v-model="fields['bot-field']"
               name="bot-field"
               type="text"
               tabindex="-1"
@@ -91,8 +110,8 @@ function onFieldBlur(field: "name" | "email" | "message") {
           </div>
 
           <FieldText
-            v-model="form.data.name"
-            :error="form.errors.name"
+            v-model="fields.name"
+            :error="errors.name"
             name="name"
             label="お名前"
             placeholder="sinsky"
@@ -102,8 +121,8 @@ function onFieldBlur(field: "name" | "email" | "message") {
           />
 
           <FieldText
-            v-model="form.data.email"
-            :error="form.errors.email"
+            v-model="fields.email"
+            :error="errors.email"
             name="email"
             label="メールアドレス"
             type="email"
@@ -114,8 +133,8 @@ function onFieldBlur(field: "name" | "email" | "message") {
           />
 
           <FieldArea
-            v-model="form.data.message"
-            :error="form.errors.message"
+            v-model="fields.message"
+            :error="errors.message"
             name="message"
             label="内容"
             placeholder="お問い合わせ内容を入力してください"
@@ -125,8 +144,8 @@ function onFieldBlur(field: "name" | "email" | "message") {
           />
 
           <div class="mt-2 flex justify-end">
-            <FormButton :loading="form.pending">
-              <span>{{ form.pending ? "送信中..." : "送信" }}</span>
+            <FormButton :loading="pending">
+              <span>{{ pending ? "送信中..." : "送信" }}</span>
             </FormButton>
           </div>
         </form>
