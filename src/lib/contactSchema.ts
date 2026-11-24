@@ -18,3 +18,17 @@ export const contactSchema = z.object({
 });
 
 export type ContactFormValues = z.infer<typeof contactSchema>;
+
+export type ContactField = "name" | "email" | "message";
+
+/**
+ * blur時のフィールド単位検証用: 無効なら最初の日本語メッセージを返す。
+ * 有効な場合は undefined を返す。
+ */
+export function fieldError(
+  field: ContactField,
+  value: string,
+): string | undefined {
+  const result = contactSchema.shape[field].safeParse(value);
+  return result.success ? undefined : result.error.issues[0]?.message;
+}

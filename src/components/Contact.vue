@@ -6,7 +6,7 @@ import Reveal from "@/components/Reveal.vue";
 import FieldText from "@/components/form/FieldText.vue";
 import FieldArea from "@/components/form/FieldArea.vue";
 import FormButton from "@/components/form/FormButton.vue";
-import { contactSchema } from "@/lib/contactSchema";
+import { contactSchema, fieldError } from "@/lib/contactSchema";
 
 defineProps<{ bgColor: string }>();
 
@@ -38,6 +38,13 @@ async function onSubmit() {
     toast.error("送信エラー", {
       description: "お手数ですが、再度送信してください。",
     });
+  }
+}
+
+function onFieldBlur(field: "name" | "email" | "message") {
+  const error = fieldError(field, form.data[field]);
+  if (error) {
+    form.setError(field, error);
   }
 }
 </script>
@@ -88,6 +95,7 @@ async function onSubmit() {
             placeholder="sinsky"
             autocomplete="name"
             required
+            @blur="onFieldBlur('name')"
           />
 
           <FieldText
@@ -99,6 +107,7 @@ async function onSubmit() {
             placeholder="you@example.com"
             autocomplete="email"
             required
+            @blur="onFieldBlur('email')"
           />
 
           <FieldArea
@@ -109,6 +118,7 @@ async function onSubmit() {
             placeholder="お問い合わせ内容を入力してください"
             :rows="6"
             required
+            @blur="onFieldBlur('message')"
           />
 
           <div class="mt-2 flex justify-end">

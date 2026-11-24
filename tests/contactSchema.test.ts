@@ -1,4 +1,4 @@
-import { contactSchema } from "@/lib/contactSchema";
+import { contactSchema, fieldError } from "@/lib/contactSchema";
 import { describe, expect, it } from "vitest";
 
 const valid = {
@@ -65,5 +65,25 @@ describe("contactSchema", () => {
     expect(
       contactSchema.safeParse({ ...valid, message: "あ".repeat(5001) }).success,
     ).toBe(false);
+  });
+});
+
+describe("fieldError", () => {
+  it("returns the Japanese message for an invalid name", () => {
+    expect(fieldError("name", "   ")).toBe("お名前を入力してください");
+  });
+
+  it("returns undefined for a valid email", () => {
+    expect(fieldError("email", "sin@example.com")).toBeUndefined();
+  });
+
+  it("returns the Japanese message for a short message", () => {
+    expect(fieldError("message", "short")).toBe(
+      "内容は最低10文字以上入力してください",
+    );
+  });
+
+  it("returns undefined for a valid name", () => {
+    expect(fieldError("name", "sinsky")).toBeUndefined();
   });
 });

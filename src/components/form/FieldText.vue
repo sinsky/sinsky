@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 defineEmits<{
   (e: "update:modelValue", value: string): void;
+  (e: "blur"): void;
 }>();
 
 const id = useId();
@@ -51,6 +52,7 @@ const describedBy = computed(() => {
       :describedBy="describedBy"
       :invalid="!!error"
       @update:modelValue="$emit('update:modelValue', $event)"
+      @blur="$emit('blur')"
     />
     <FormHint v-if="hint && !error" :id="hintId">{{ hint }}</FormHint>
     <FormError v-if="error" :id="errorId">{{ error }}</FormError>

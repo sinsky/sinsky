@@ -46,11 +46,18 @@ export async function submitContact(
     return { ok: false, status: 500, message: "server is not configured" };
   }
 
-  const response = await fetch(webhookUrl, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(buildSlackPayload(values)),
-  });
+  let response: Response;
+  try {
+    response = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(buildSlackPayload(values)),
+    });
+  } catch {
+    // URLはログに含めない（シークレット保護）
+    console.error(JSON.stringify({ message: "slack webhook request failed" }));
+    return { ok: false, status: 502, message: "failed to notify slack" };
+  }
 
   if (!response.ok) {
     console.error(

@@ -104,4 +104,14 @@ describe("submitContact", () => {
     });
     expect(slackCalls).toBe(0);
   });
+
+  it("returns 502-equivalent failure when the webhook request fails at transport level", async () => {
+    server.use(http.post(SLACK_URL, () => Response.error()));
+    const result = await submitContact(valid, SLACK_URL);
+    expect(result).toEqual({
+      ok: false,
+      status: 502,
+      message: "failed to notify slack",
+    });
+  });
 });
