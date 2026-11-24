@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Toaster } from "@/components/ui/sonner";
+import "@/assets/index.css";
 </script>
 
 <template>
-  <router-view></router-view>
+  <slot />
   <Toaster richColors closeButton />
 </template>

@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 .void
+.void-wrangler.jsonc
+.cloudflare
 *.local
 
 # Editor directories and files

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useField } from "vee-validate";
 import { computed, useId } from "vue";
 import FormLabel from "./FormLabel.vue";
 import FormInput from "./FormInput.vue";
@@ -14,19 +13,23 @@ interface Props {
   autocomplete?: string;
   hint?: string;
   required?: boolean;
+  modelValue: string;
+  error?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: "text",
 });
 
+defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
+
 const id = useId();
 const hintId = `${id}-hint`;
 const errorId = `${id}-error`;
-const { value, errorMessage, handleBlur, handleChange, meta } =
-  useField<string>(props.name, undefined, { validateOnValueUpdate: false });
 
-const hasError = computed(() => !!errorMessage.value && meta.touched);
+const hasError = computed(() => !!props.error);
 const describedBy = computed(() => {
   const ids: string[] = [];
   if (props.hint && !hasError.value) ids.push(hintId);
@@ -44,15 +47,12 @@ const describedBy = computed(() => {
       :type="type"
       :autocomplete="autocomplete"
       :placeholder="placeholder"
-      :modelValue="(value as string) ?? ''"
+      :modelValue="modelValue"
       :describedBy="describedBy"
-      :invalid="!!errorMessage && meta.touched"
-      @update:modelValue="handleChange"
-      @blur="handleBlur"
+      :invalid="!!error"
+      @update:modelValue="$emit('update:modelValue', $event)"
     />
-    <FormHint v-if="hint && !errorMessage" :id="hintId">{{ hint }}</FormHint>
-    <FormError v-if="errorMessage && meta.touched" :id="errorId">{{
-      errorMessage
-    }}</FormError>
+    <FormHint v-if="hint && !error" :id="hintId">{{ hint }}</FormHint>
+    <FormError v-if="error" :id="errorId">{{ error }}</FormError>
   </div>
 </template>

@@ -1,72 +1,44 @@
 <script setup lang="ts">
-import { useForm } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
-import * as z from "zod";
+import { useForm } from "@void/vue";
 import { toast } from "vue-sonner";
 
 import Reveal from "@/components/Reveal.vue";
 import FieldText from "@/components/form/FieldText.vue";
 import FieldArea from "@/components/form/FieldArea.vue";
 import FormButton from "@/components/form/FormButton.vue";
+import { contactSchema } from "@/lib/contactSchema";
 
 defineProps<{ bgColor: string }>();
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
-const contactApiUrl = "/api/contact";
 
-const formSchema = toTypedSchema(
-  z.object({
-    "bot-field": z.string().default(""),
-    name: z.string().min(1, { message: "お名前を入力してください" }).max(50),
-    email: z.string().email("有効なメールアドレスを入力してください"),
-    message: z
-      .string()
-      .min(10, { message: "内容は最低10文字以上入力してください" })
-      .max(5000, { message: "内容は5000文字以内で入力してください" }),
-  }),
+const form = useForm(
+  "/",
+  { "bot-field": "", name: "", email: "", message: "" },
+  { resetOnSuccess: true },
 );
 
-const { handleSubmit, isSubmitting, resetForm, setFieldValue } = useForm({
-  validationSchema: formSchema,
-  initialValues: {
-    "bot-field": "",
-    name: "",
-    email: "",
-    message: "",
-  },
-});
-
-const onSubmit = handleSubmit(async (values) => {
-  try {
-    const response = await fetch(contactApiUrl, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        "bot-field": values["bot-field"],
-        name: values.name,
-        email: values.email,
-        message: values.message,
-      }),
-    });
-
-    if (response.ok) {
-      toast.success("送信完了", { description: "確認後、返答いたします。" });
-      resetForm();
-    } else {
-      toast.error("送信エラー", {
-        description: "お手数ですが、再度送信してください。",
-      });
+async function onSubmit() {
+  const parsed = contactSchema.safeParse(form.data);
+  if (!parsed.success) {
+    for (const issue of parsed.error.issues) {
+      form.setError(
+        issue.path[0] as "bot-field" | "name" | "email" | "message",
+        issue.message,
+      );
     }
-  } catch (error) {
-    console.error("フォーム送信エラー:", error);
+    return;
+  }
+  try {
+    await form.post();
+    if (form.wasSuccessful) {
+      toast.success("送信完了", { description: "確認後、返答いたします。" });
+    }
+  } catch {
     toast.error("送信エラー", {
       description: "お手数ですが、再度送信してください。",
     });
   }
-});
-
-function onBotField(event: Event) {
-  setFieldValue("bot-field", (event.target as HTMLInputElement).value);
 }
 </script>
 
@@ -95,20 +67,22 @@ function onBotField(event: Event) {
         class="bubble-shape w-full bg-white/85 p-8 shadow-sm backdrop-blur-sm md:p-12"
         style="--bubble-duration: 16s"
       >
-        <form @submit="onSubmit" class="flex flex-col gap-5" novalidate>
+        <form @submit.prevent="onSubmit" class="flex flex-col gap-5" novalidate>
           <div hidden aria-hidden="true">
             <label for="bot-field">bot-field</label>
             <input
               id="bot-field"
+              v-model="form.data['bot-field']"
               name="bot-field"
               type="text"
               tabindex="-1"
               autocomplete="off"
-              @input="onBotField"
             />
           </div>
 
           <FieldText
+            v-model="form.data.name"
+            :error="form.errors.name"
             name="name"
             label="お名前"
             placeholder="sinsky"
@@ -117,6 +91,8 @@ function onBotField(event: Event) {
           />
 
           <FieldText
+            v-model="form.data.email"
+            :error="form.errors.email"
             name="email"
             label="メールアドレス"
             type="email"
@@ -126,6 +102,8 @@ function onBotField(event: Event) {
           />
 
           <FieldArea
+            v-model="form.data.message"
+            :error="form.errors.message"
             name="message"
             label="内容"
             placeholder="お問い合わせ内容を入力してください"
@@ -134,8 +112,8 @@ function onBotField(event: Event) {
           />
 
           <div class="mt-2 flex justify-end">
-            <FormButton :loading="isSubmitting">
-              <span>{{ isSubmitting ? "送信中..." : "送信" }}</span>
+            <FormButton :loading="form.pending">
+              <span>{{ form.pending ? "送信中..." : "送信" }}</span>
             </FormButton>
           </div>
         </form>
