@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { useForm } from "@void/vue";
-import { toast } from "vue-sonner";
 
 import Reveal from "@/components/Reveal.vue";
 import FieldText from "@/components/form/FieldText.vue";
 import FieldArea from "@/components/form/FieldArea.vue";
 import FormButton from "@/components/form/FormButton.vue";
+import ContactResultModal from "@/components/ContactResultModal.vue";
 import { contactSchema, fieldError } from "@/lib/contactSchema";
 
 defineProps<{ bgColor: string }>();
@@ -17,6 +18,8 @@ const form = useForm(
   { "bot-field": "", name: "", email: "", message: "" },
   { resetOnSuccess: true },
 );
+
+const result = ref<"success" | "error" | null>(null);
 
 async function onSubmit() {
   const parsed = contactSchema.safeParse(form.data);
@@ -32,12 +35,12 @@ async function onSubmit() {
   try {
     await form.post();
     if (form.wasSuccessful) {
-      toast.success("送信完了", { description: "確認後、返答いたします。" });
+      result.value = "success";
+    } else if (form.error) {
+      result.value = "error";
     }
   } catch {
-    toast.error("送信エラー", {
-      description: "お手数ですが、再度送信してください。",
-    });
+    result.value = "error";
   }
 }
 
@@ -129,5 +132,11 @@ function onFieldBlur(field: "name" | "email" | "message") {
         </form>
       </div>
     </Reveal>
+
+    <ContactResultModal
+      v-if="result !== null"
+      :type="result"
+      @close="result = null"
+    />
   </section>
 </template>
