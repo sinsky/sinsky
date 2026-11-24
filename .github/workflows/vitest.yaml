@@ -34,9 +34,6 @@ jobs:
       - name: Check formatting
         run: pnpm run fmt:check
 
-      - name: Generate void types
-        run: pnpm run types
-
       - name: Build
         run: pnpm run build
 

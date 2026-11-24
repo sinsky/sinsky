@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "void prepare && vue-tsc -b && vite build",
     "test": "vitest",
     "types": "void prepare",
     "deploy": "void deploy",
