@@ -98,4 +98,23 @@ describe("Contact.vue", () => {
     });
     expect(fetchMock).not.toHaveBeenCalled();
   });
+
+  it("clears a field error as soon as the user edits the field", async () => {
+    const wrapper = mountContact();
+
+    await wrapper.find("form").trigger("submit");
+    await vi.waitFor(() => {
+      expect(wrapper.text()).toContain(
+        "有効なメールアドレスを入力してください",
+      );
+    });
+
+    await wrapper.find('input[name="email"]').setValue("fixed@example.com");
+    await vi.waitFor(() => {
+      expect(wrapper.text()).not.toContain(
+        "有効なメールアドレスを入力してください",
+      );
+    });
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+  });
 });

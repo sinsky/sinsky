@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 
 import Reveal from "@/components/Reveal.vue";
 import FieldText from "@/components/form/FieldText.vue";
@@ -27,6 +27,19 @@ const errors = reactive<{ name?: string; email?: string; message?: string }>(
 
 const pending = ref(false);
 const result = ref<"success" | "error" | null>(null);
+
+// 編集を開始したらそのフィールドのエラーを即時クリアする
+// （旧vee-validate / Void useForm に組み込みだった「編集で自動クリア」の等価実装）
+for (const field of ["name", "email", "message"] as const) {
+  watch(
+    () => fields[field],
+    () => {
+      if (errors[field]) {
+        delete errors[field];
+      }
+    },
+  );
+}
 
 async function onSubmit() {
   const parsed = contactSchema.safeParse(fields);
