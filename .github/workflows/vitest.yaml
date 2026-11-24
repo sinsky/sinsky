@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   check:
-    name: Format, Build, and Test
+    name: Format, Build, Test, and Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -39,3 +39,13 @@ jobs:
 
       - name: Test
         run: pnpm run test
+
+      # mainへのpush（マージ含む）と手動実行のみ、テスト緑の後にデプロイ
+      - name: Deploy to Cloudflare
+        if: >-
+          github.event_name == 'push' ||
+          (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+        env:
+          # Scoped API token: Settings → Secrets and variables → Actions
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: pnpm exec void deploy --platform cloudflare
